@@ -13,7 +13,7 @@ export default function HoverLink({ children, className } : Props){
         <span className="relative z-20">
           {children}
         </span>
-        <span className="absolute mt-10 w-[120%] left-0 h-40 bg-gradient-to-br from-[var(--primary-color)] via-[var(--seconday-color)] group-hover:rotate-[-90deg] origin-top-left transition-all duration-300 ease-in-out z-10"></span>
+        <span className="absolute mt-10 w-[120%] left-0 h-40 bg-gradient-to-br from-[var(--primary-color)] via-[var(--secondary-color)]  to-[var(--third-color)] group-hover:rotate-[-90deg] origin-top-left transition-all duration-300 ease-in-out z-10"></span>
       </Link>
   )
 }

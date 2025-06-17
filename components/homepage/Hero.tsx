@@ -2,8 +2,8 @@ import HoverLink from "../HoverLink";
 
 export default function Hero(){
   return (
-     <div className="py-10 rounded-bl-2xl rounded-br-2xl relative h-screen overflow-hidden max-h-[800px] p-5  shadow-black/60 shadow-2xl bg-gradient-to-br from-[var(--primary-color)] via-[var(--seconday-color)] to-[var(--third-color)]">
-        <div className="mt-20 flex flex-col items-center justify-center">
+     <div className="py-10 rounded-bl-2xl rounded-br-2xl relative h-screen overflow-hidden max-h-[800px] p-5 border-b border-white/10 shadow-black/60 shadow-2xl">
+        <div className="mt-20 flex flex-col items-center justify-center ">
         
           <h2 className="text-white text-6xl text-center tracking-widest">
             <span>Invoice</span>
