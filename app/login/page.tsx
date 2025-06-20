@@ -12,12 +12,12 @@ export default async function Login({ searchParams }: Props) {
   const mode = (await searchParams).mode;
 
   return (
-    <div className="flex items-center justify-center h-auto md:h-screen p-5 bg-gradient-to-br from-[var(--primary-color)] via-[var(--secondary-color)] to-[var(--third-color)]">
+    <div className="flex items-center justify-center h-screen p-5 bg-gradient-to-br from-[var(--primary-color)] via-[var(--secondary-color)] to-[var(--third-color)] overflow-auto">
 
-      <div className="flex flex-col md:flex-row items-center justify-between gap-5 max_width mx-auto w-full">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-5 max_width mx-auto w-full py-10 md:py-0">
         <div className="w-full h-full flex flex-col items-center justify-center playfair text-white gap-5">
-          <h2 className="text-4xl text-center">Sign Up And Get Your Personal Dashboard!</h2>
-          <div className="h-[300px] w-[90%] bg-gray-300 rounded-lg"/>
+          <h2 className="text-3xl md:text-4xl text-center">Sign Up And Get Your Personal Dashboard!</h2>
+          <div className="hidden md:inline-block h-[300px] w-[90%] bg-gray-300 rounded-lg"/>
           <p className="text-xl text-gray-300">Your Earnings Just Minutes Away</p>
         </div> 
 
@@ -28,18 +28,12 @@ export default async function Login({ searchParams }: Props) {
           >
             <IoArrowBack className="text-xl"/>
             <span>Back Home</span>
-            <span className="absolute bottom-[-1px] h-[1px] bg-white scale-x-0 origin-center group-hover:scale-x-100 transition-all duration-300 ease-in-out border w-full"></span>
+            <span className="absolute bottom-[-1px] h-[1px] bg-white scale-x-0 origin-left group-hover:scale-x-100 transition-all duration-300 ease-in-out border w-full"></span>
           </Link>
 
-          <div className="">
-            <AnimateForm modeKey={mode ?? "signin"}>
-              {mode === "signup" ? (
-                  <SignUpForm />
-              ) : (
-                <LoginForm />
-              )}
-            </AnimateForm>
-          </div>
+          <AnimateForm modeKey={mode ?? "signin"}>
+            {mode === "signup" ? <SignUpForm /> : <LoginForm />}
+          </AnimateForm>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 export default function DemoSection(){
   return (
-    <section className="py-10 max_width mx-auto my-10 px-5 lg:px-0 flex flex-col md:flex-row items-center justify-between gap-10">
+    <section className="py-10 max_width mx-auto my-10 flex flex-col md:flex-row items-center justify-between gap-10 px-5">
       <div className="w-full md:w-1/2 text-white">
         <h2 className="text-3xl md:text-4xl font-semibold mb-4 playfair">
           InvoTracker in Action
