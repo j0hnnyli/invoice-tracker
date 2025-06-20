@@ -11,19 +11,22 @@ type Props = {
   placeholder : string;
   className? : string;
   id?: string;
+  name?: string;
+  onChange ?: () => void;
 }
 
-export default function TogglePasswordInput({placeholder, className, id} : Props){
+export default function TogglePasswordInput({placeholder, className, id, name = "password", onChange} : Props){
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <AnimateBorderBottomComponent>
       <div className="flex items-center ">
         <input 
-          type={showPassword ? "text" :"password" }
-          name="password" 
+          type={showPassword ? "text" :"password"}
+          name={name}
           id={id}
           placeholder={placeholder}
+          onChange={onChange}
           className={twMerge("outline-none w-full py-1", className)}
         />
         <button 
@@ -31,7 +34,7 @@ export default function TogglePasswordInput({placeholder, className, id} : Props
             e.preventDefault();
             setShowPassword((prev) => !prev);
           }}
-          className="cursor-pointer text-xl"
+          className="cursor-pointer text-xl hover:text-gray-300"
         >
           {showPassword ? <IoEye/> : <LuEyeClosed/>}
         </button>

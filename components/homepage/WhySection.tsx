@@ -3,7 +3,7 @@ import { whySectionInfo } from "@/lib/content/whySectionInfo";
 
 export default function WhySection(){
   return (
-    <section className="max_width mx-auto my-10 px-5 lg:px-0 grid grid-cols-1 md:grid-cols-3 gap-5">
+    <section className="max_width mx-auto my-10 grid grid-cols-1 md:grid-cols-3 gap-5 px-5">
       {whySectionInfo.map(({icon : Icon, text}, i) => (
         <div key={i} className="text-white">
           <Icon className="text-4xl mx-auto"/>
