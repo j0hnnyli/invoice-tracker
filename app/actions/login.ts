@@ -22,7 +22,7 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    return {error: 'Invalid Credentials'}
+    return error.code === 'invalid_credentials' ? {error: 'Invalid Credentials'} : {error: 'Email Not Confirmed'} ;
   }
 
   revalidatePath('/dashboard', 'layout')
