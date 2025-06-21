@@ -7,6 +7,8 @@ import Link from "next/link";
 import { login } from "../actions/login";
 import { FormEvent, useState } from "react";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
+import ResetDialog from "./ResetDialog";
+
 
 export default function LoginForm(){
   const [errorMsg, setErrorMsg] = useState<string>('');
@@ -29,47 +31,54 @@ export default function LoginForm(){
   }
 
   return (
-    <form 
-      onSubmit={(e) => handleSignIn(e)}
-      className="text-white"
-    >
-      <div className="flex flex-col mb-3 gap-2">
-        <label htmlFor="email" className="text-xl playfair">Email:</label>
-        <AnimateBorderBottomComponent>
-          <input 
-            type="text" 
-            name="email" 
-            id="email"
-            placeholder="Enter your Email . . ."
+    <>
+      <form 
+        onSubmit={(e) => handleSignIn(e)}
+        className="text-white"
+      >
+        <div className="flex flex-col mb-3 gap-2">
+          <label htmlFor="email" className="text-xl playfair">Email:</label>
+          <AnimateBorderBottomComponent>
+            <input 
+              type="text" 
+              name="email" 
+              id="email"
+              placeholder="Enter your Email . . ."
+              onChange={resetError}
+              className="outline-none py-1"
+            />
+          </AnimateBorderBottomComponent>
+        </div>
+      
+        <div className="flex flex-col gap-2 mb-3">
+          <label htmlFor="password" className="text-xl playfair">Password:</label>
+          <TogglePasswordInput 
+            placeholder="Enter Your Password . . ." 
+            id="password" 
             onChange={resetError}
-            className="outline-none py-1"
           />
-        </AnimateBorderBottomComponent>
-      </div>
-    
-      <div className="flex flex-col gap-2 mb-3">
-        <label htmlFor="password" className="text-xl playfair">Password:</label>
-        <TogglePasswordInput 
-          placeholder="Enter Your Password . . ." 
-          id="password" 
-          onChange={resetError}
-        />
-      </div>
+        </div>
 
-      <div className="flex items-center gap-5 mb-3">
-        <HoverAction type="submit" className="playfair border py-1 px-4 rounded-lg cursor-pointer">
-          Log In
-        </HoverAction>
-        {isLoading && <CgSpinnerTwoAlt className="animate-spin"/>}
-        {errorMsg.length > 0 &&  <p className="text-red-500 font-bold">{errorMsg}*</p>}
-      </div>
-
+        <div className="flex items-center gap-5 mb-3">
+          <HoverAction type="submit" className="playfair border py-1 px-4 rounded-lg cursor-pointer">
+            Log In
+          </HoverAction>
+          {isLoading && <CgSpinnerTwoAlt className="animate-spin"/>}
+          {errorMsg.length > 0 &&  <p className="text-red-500 font-bold">{errorMsg}*</p>}
+        </div>
+      </form>
+      
       <p className="text-sm text-white">
         Don&apos;t have an account?{" "}
         <Link href="?mode=signup" className="hover:text-gray-300 hover:underline">
           Sign Up
         </Link>
       </p>
-    </form>
+      
+      <p className="text-sm text-white">
+        Forgot Password? {" "}
+        <ResetDialog />
+      </p>
+    </>
   )
 }

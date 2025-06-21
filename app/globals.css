@@ -11,6 +11,10 @@
   max-width : 1100px
 }
 
+.dashboard_max_width{
+  max-width : 1500px
+}
+
 .playfair{
   font-family: var(--font-playfair);
 }

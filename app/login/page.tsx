@@ -12,7 +12,7 @@ export default async function Login({ searchParams }: Props) {
   const mode = (await searchParams).mode;
 
   return (
-    <div className="flex items-center justify-center h-screen p-5 bg-gradient-to-br from-[var(--primary-color)] via-[var(--secondary-color)] to-[var(--third-color)] overflow-auto">
+    <div className="flex items-center justify-center h-screen p-5 overflow-auto">
 
       <div className="flex flex-col md:flex-row items-center justify-between gap-5 max_width mx-auto w-full py-10 md:py-0">
         <div className="w-full h-full flex flex-col items-center justify-center playfair text-white gap-5">
