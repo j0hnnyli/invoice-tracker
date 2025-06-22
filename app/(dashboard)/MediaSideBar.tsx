@@ -17,8 +17,11 @@ import SignoutButton from "@/components/SignoutButton";
 import Link from "next/link";
 import { useState } from "react";
 
+type Props = {
+  name : string;
+}
 
-export default function MediaSideBar(){
+export default function MediaSideBar({ name } : Props){
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -38,9 +41,10 @@ export default function MediaSideBar(){
           <SheetDescription className="text-4xl playfair">
             InvoTracker
           </SheetDescription>
+          <p className="text-xl playfair">{name}</p>
         </SheetHeader>
 
-        <div className="mt-10 flex flex-col px-5 gap-3">
+        <div className="mt-5 flex flex-col px-5 gap-3">
             <Link href="/dashboard" className="rounded-lg hover:bg-white/10">
               <SheetClose className="flex items-center gap-2">
                 <MdDashboard className="text-3xl"/>

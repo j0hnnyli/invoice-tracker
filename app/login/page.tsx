@@ -3,6 +3,7 @@ import { IoArrowBack } from "react-icons/io5";
 import LoginForm from "./LogInForm";
 import SignUpForm from "./SignUpForm";
 import AnimateForm from "@/components/animation-components/AnimateForms";
+import Image from "next/image";
 
 type Props = {
   searchParams: { mode?: string };
@@ -17,7 +18,13 @@ export default async function Login({ searchParams }: Props) {
       <div className="flex flex-col md:flex-row items-center justify-between gap-5 max_width mx-auto w-full py-10 md:py-0">
         <div className="w-full h-full flex flex-col items-center justify-center playfair text-white gap-5">
           <h2 className="text-3xl md:text-4xl text-center">Sign Up And Get Your Personal Dashboard!</h2>
-          <div className="hidden md:inline-block h-[300px] w-[90%] bg-gray-300 rounded-lg"/>
+          <Image
+            src="/dashboard.png"
+            alt="dashboard"
+            width={400}
+            height={300}
+            className="object-cover object-top w-full h-full rounded-lg hidden md:inline-block"
+          />
           <p className="text-xl text-gray-300">Your Earnings Just Minutes Away</p>
         </div> 
 

@@ -10,7 +10,7 @@ type Props = {
 
 export default function SideBar({ name } : Props){
   return (
-    <div className="h-screen w-[30%] max-w-[300px] text-white p-5 hidden md:inline-block">
+    <div className="h-screen w-[250px] text-white p-5 hidden md:inline-block sticky top-0">
       <div className="flex flex-col items-center justify-center gap-2 playfair ">
         <TbFileInvoice className="text-7xl"/>
         <h2 className="text-4xl">InvoTracker</h2>

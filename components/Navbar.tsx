@@ -1,4 +1,5 @@
-import HoverAction from "./HoverAction";
+import SignInDashboardLink from "./SignInDashboardLink";
+import { Suspense } from "react";
 
 export default function Navbar() {
   return (
@@ -7,7 +8,10 @@ export default function Navbar() {
         InvoTracker
       </h2>
 
-      <HoverAction href="/login">Sign In</HoverAction>
+      <Suspense fallback={<div className="w-[100px] h-[40px] bg-white/20 animate-pulse rounded-lg"/>}>
+        <SignInDashboardLink />
+      </Suspense>
     </nav>
   );
 }
+
