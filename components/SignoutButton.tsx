@@ -4,27 +4,25 @@ import { signout } from "@/app/actions/signout";
 import { useTransition } from "react";
 import { PiSignOutFill } from "react-icons/pi";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
-  onSignoutComplete?: () => void;
-};
+  className ?: string;
+}
 
-export default function SignoutButton({ onSignoutComplete }: Props) {
+export default function SignoutButton({ className } : Props) {
   const [isPending, startTransition] = useTransition();
 
   async function handleSignout() {
     startTransition(async () => {
       await signout();
-      if (onSignoutComplete) {
-        onSignoutComplete();
-      }
     });
   }
 
   return (
     <button
       onClick={handleSignout}
-      className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 cursor-pointer"
+      className={twMerge("flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 cursor-pointer", className)}
       disabled={isPending}
     >
       {isPending ? (
