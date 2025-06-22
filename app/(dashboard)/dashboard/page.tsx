@@ -7,17 +7,17 @@ export default async function Dashboard(){
     <div>
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-5">
         <div className="flex flex-col items-center justify-center h-[150px] bg-white/20 rounded-lg md:text-lg font-bold">
-          <p>$ 300</p>
+          <p>$ 1120</p>
           <p className="playfair">Total Earnings</p>
         </div>
         
         <div className="flex flex-col items-center justify-center h-[150px] bg-white/20 rounded-lg md:text-lg font-bold">
-          <p>5</p>
+          <p>1</p>
           <p className="playfair">Open Invoices</p>
         </div>
         
         <div className="flex flex-col items-center justify-center h-[150px] bg-white/20 rounded-lg md:text-lg font-bold">
-          <p>1</p>
+          <p>2</p>
           <p className="playfair">Closed Invoices</p>
         </div>
         
@@ -27,7 +27,7 @@ export default async function Dashboard(){
         </div>
       </section>
 
-      <Suspense fallback={<div className="h-[500px] bg-white/30 rounded-lg animate-pulse my-5"/>}>
+      <Suspense fallback={<div className="h-[500px] bg-white/20 rounded-lg animate-pulse my-5"/>}>
         <Chartsection/>
       </Suspense>
       
