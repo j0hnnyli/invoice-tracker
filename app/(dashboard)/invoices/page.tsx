@@ -1,6 +1,7 @@
 import { FaPlus } from "react-icons/fa6";
 import InvoiceControls from "./InvoiceControls";
 import InvoiceFilter from "./InvoiceFilter";
+import Link from "next/link";
 
 const mockInvoices = [
   {
@@ -55,10 +56,11 @@ export default async function Invoices({ searchParams } : Props) {
     <div className="text-white">
       <div className="flex items-center justify-between mb-5">
         <InvoiceFilter />
-        <div className="p-2 rounded-full bg-white/20 hover:bg-white/10">
+        <Link href="/newinvoice" className="p-2 rounded-full bg-white/20 hover:bg-white/10">
           <FaPlus className="text-xl" />
-        </div>
+        </Link>
       </div>
+
       {mockInvoices.length === 0 && ( 
         <div className="flex flex-col items-center justify-center text-center text-white py-10">
           <h2 className="text-3xl font-bold mb-2 playfair">No Invoices</h2>
@@ -66,6 +68,7 @@ export default async function Invoices({ searchParams } : Props) {
           <p className="text-sm text-gray-300 mt-1">It only takes a few minutes</p>
         </div>
       )}
+
       {filtered.map((invoice) => (
           <div
             key={invoice.id}

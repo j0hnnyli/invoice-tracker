@@ -1,5 +1,6 @@
 import Image from "next/image";
 import SignInDashboardLink from "../SignInDashboardLink";
+import { Suspense } from "react";
 
 export default function Hero() {
   return (
@@ -14,7 +15,9 @@ export default function Hero() {
           your business organized
         </p>
 
-        <SignInDashboardLink />
+        <Suspense fallback={<div className="w-[100px] h-[40px] bg-white/20 animate-pulse rounded-lg"/>}>
+          <SignInDashboardLink text="Sign Up Now"/>
+        </Suspense>
       </div>
 
       <div className="w-full max-w-[800px] h-[180px] mx-auto md:h-[400px] mt-10 rounded-lg relative overflow-hidden shadow-white/40 shadow-xl">

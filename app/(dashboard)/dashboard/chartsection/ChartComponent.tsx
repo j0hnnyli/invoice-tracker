@@ -9,9 +9,9 @@ type Props = {
 export default function ChartComponent( { earnings } : Props){
 
   return (
-    <div className="w-[200%] lg:w-full h-[500px]">
+    <div className="w-[200%] md:w-[150%] lg:w-full h-[300px] md:h-[500px] overflow-x-auto">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart width={700} height={500} data={earnings}>
+        <LineChart data={earnings}>
           <XAxis dataKey="month"         
             stroke="white"         
           />

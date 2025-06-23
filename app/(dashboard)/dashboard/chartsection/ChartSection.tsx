@@ -14,7 +14,7 @@ export default async function Chartsection() {
   // const earnings = await getEarnings();
 
   return (
-    <section className="my-5 overflow-x-auto">
+    <section className="overflow-x-auto lg:w-[70%]">
       <ChartComponent earnings={mockEarningsData}/>
     </section>
   )

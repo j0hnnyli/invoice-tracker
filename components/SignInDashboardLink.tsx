@@ -1,14 +1,21 @@
 import { getUser } from "@/lib/supabaseDataFns";
 import HoverAction from "./HoverAction";
 
-export default async function SignInDashboardLink(){
-  const user = await getUser();
+type Props = {
+  text?: string;
+};
 
-  if(!user){
-    return <HoverAction href="/login">Sign In</HoverAction>
+export default async function SignInDashboardLink({ text = "Sign In" }: Props) {
+  try {
+    const user = await getUser();
+
+    if (user) {
+      return <HoverAction href="/dashboard">My Dashboard</HoverAction>;
+    }
+
+    return <HoverAction href="/login">{text}</HoverAction>;
+  } catch {
+
+    return <HoverAction href="/login">{text}</HoverAction>;
   }
-
-  return (
-    <HoverAction href="/dashboard">My Dashboard</HoverAction>
-  )
 }
