@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer";
 import Hero from "@/components/homepage/Hero";
-import DemoSection from "@/components/homepage/DemoSection";
+import StepSection from "@/components/homepage/StepSection";
 import WhySection from "@/components/homepage/WhySection";
 import Navbar from "@/components/Navbar";
 
@@ -10,7 +10,7 @@ export default function Home() {
       <Navbar />
       <Hero/>
       <WhySection />
-      <DemoSection />
+      <StepSection />
       <Footer />
     </div>
   );
