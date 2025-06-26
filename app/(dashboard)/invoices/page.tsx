@@ -2,7 +2,7 @@ import { FaPlus } from "react-icons/fa6";
 import InvoiceControls from "./InvoiceControls";
 import InvoiceFilter from "./InvoiceFilter";
 import Link from "next/link";
-import { mockInvoices } from "@/lib/content/mockInvoices";
+import { getAllInvoices } from "@/lib/supabaseDataFns";
 
 const statusColors: Record<string, string> = {
   Paid: "text-green-400 bg-green-400/10",
@@ -15,50 +15,57 @@ type Props = {
 }
 
 export default async function Invoices({ searchParams } : Props) {
+  const { data, error } = await getAllInvoices();
   const params = await searchParams
   const filter = params.filter;
 
   const filtered = filter
-    ? mockInvoices.filter((inv) => inv.status === filter)
-    : mockInvoices;
+    ? data?.filter((inv) => inv.status === filter)
+    : data;
 
   return (
     <div className="text-white">
       <div className="flex items-center justify-between mb-5">
         <InvoiceFilter />
-        <Link href="/newinvoice" className="p-2 rounded-full bg-white/20 hover:bg-white/10">
+        <Link href="/invoices/new" className="p-2 rounded-full bg-white/20 hover:bg-white/10">
           <FaPlus className="text-xl" />
         </Link>
       </div>
 
-      {mockInvoices.length === 0 && ( 
+      {error ? (
         <div className="flex flex-col items-center justify-center text-center text-white py-10">
-          <h2 className="text-3xl font-bold mb-2 playfair">No Invoices</h2>
-          <p className="text-lg">Add your first invoice now</p>
-          <p className="text-sm text-gray-300 mt-1">It only takes a few minutes</p>
+          <h2 className="text-3xl font-bold mb-2 playfair text-red-500">{ error }</h2>
         </div>
-      )}
+        ) : filtered?.length === 0 && ( 
+          <div className="flex flex-col items-center justify-center text-center text-white py-10">
+            <h2 className="text-3xl font-bold mb-2 playfair">No {filter} Invoices</h2>
+          </div>
+        )
+      }
 
-      {filtered.map((invoice) => (
+      {filtered?.map((invoice) => (
           <div
             key={invoice.id}
             className="bg-white/20 rounded-lg p-4 flex flex-col md:flex-row items-center justify-between mb-4"
           >
             <div className="w-full flex flex-row md:flex-col items-center justify-between md:items-start md:justify-start">
-              <p className="text-lg font-semibold playfair">{invoice.client}</p>
-              <p className="text-sm text-white/60">{invoice.date}</p>
+              <p className="text-lg font-semibold playfair">{invoice.client_name}</p>
+              <p className="text-sm text-white/60">{invoice.client_email}</p>
+              <p className="text-sm text-white/60">
+                Due : {new Intl.DateTimeFormat("en-US", {dateStyle: "long",}).format( new Date(invoice.due_date ?? ""))}
+              </p>
             </div>
 
             <div className="flex items-center justify-between w-full mt-2 md:mt-0">
               <p className="text-xl font-bold text-center">${invoice.amount}</p>
 
               <p
-                className={`mt-1 px-2 py-1 rounded text-sm font-medium w-fit h-fit mx-auto ${statusColors[invoice.status]}`}
+                className={`mt-1 px-2 py-1 rounded text-sm font-medium w-fit h-fit mx-auto ${statusColors[invoice.status ?? ""]}`}
               >
                 {invoice.status}
               </p>
 
-              <InvoiceControls />
+              <InvoiceControls id={invoice.id}/>
             </div>
           </div>
         ))

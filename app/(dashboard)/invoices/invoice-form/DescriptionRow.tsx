@@ -3,17 +3,23 @@ import CustomFormInput from "./CutomFormInput";
 import { twMerge } from "tailwind-merge";
 
 type DescriptionRowProps = {
- index: number;
-  totalRows : number;
+  index: number;
+  totalRows: number;
   quantity: string;
   rate: string;
+  description : string;
   amount: string;
   onClick: () => void;
-  onChange: (index: number, field: "quantity" | "rate" | "amount", value: string) => void;
+  onChange: (
+    index: number,
+    field: "quantity" | "rate" | "amount" | "description",
+    value: string
+  ) => void;
 };
 
 export default function DescriptionRow({
   index,
+  description,
   quantity,
   rate,
   amount,
@@ -25,9 +31,7 @@ export default function DescriptionRow({
     <div
       className={twMerge(
         "grid grid-cols-1 md:grid-cols-2 gap-5 mb-5 py-2",
-        index === totalRows - 1
-          ? "border-b-none"
-          : "border-b"
+        index === totalRows - 1 ? "border-b-none" : "border-b"
       )}
     >
       <div className="flex flex-col gap-2">
@@ -38,6 +42,8 @@ export default function DescriptionRow({
           id={`description-${index}`}
           name={`description[${index}]`}
           rows={2}
+          value={description}
+          onChange={(e) => onChange(index, "description", e.target.value)}
           placeholder="Item / Service Description"
           className="outline-none"
         />

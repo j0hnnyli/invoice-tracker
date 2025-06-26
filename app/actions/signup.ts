@@ -3,36 +3,37 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
+import { signupSchema } from '@/lib/schema/signupSchema';
 
 
 export async function signup(formData: FormData ) {
-  const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-  const confirmPassword = formData.get('confirm-password') as string;
-
-  if (!name || !email || !password || !confirmPassword) {
-    return { error: 'All fields are required' }
+  const rawData = {
+    name : formData.get('name'),
+    email : formData.get('email'),
+    password : formData.get('password'),
+    confirmPassword : formData.get('confirm-password'),
   }
-  
-  if(password !== confirmPassword){
-    return { error : 'Password does not match'}
+
+  const parsed = signupSchema.safeParse(rawData);
+
+  if(parsed.error){
+    return {error : parsed.error.errors[0].message}
   }
 
   const supabase = await createClient()
 
   const { error } = await supabase.auth.signUp({
-    email,
-    password,
+    email : parsed.data.email,
+    password : parsed.data.password,
     options : {
       data : {
-        display_name : name,
+        display_name : parsed.data.name,
       }
     }
   })
 
   if (error) {
-    redirect('/error')
+    return {error : error.message}
   }
 
   revalidatePath('/dashboard', 'layout')

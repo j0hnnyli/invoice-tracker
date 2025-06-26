@@ -3,23 +3,23 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
+import { loginSchema } from '@/lib/schema/loginSchema';
 
 export async function login(formData: FormData) {
-  const email = formData.get('email') as string;
-  const  password = formData.get('password') as string;
+  const rawData = {
+    email : formData.get('email'),
+    password : formData.get('password')
+  }
 
-  if(!email || !password){
-    return {error : 'Missing Credentials'}
+  const parsed = loginSchema.safeParse(rawData);
+
+  if(parsed.error){
+    return {error : parsed.error.errors[0].message}
   }
 
   const supabase = await createClient()
 
-  const data = {
-    email,
-    password,
-  }
-  
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { error } = await supabase.auth.signInWithPassword(parsed.data)
 
   if (error) {
     return error.code === 'invalid_credentials' ? {error: 'Invalid Credentials'} : {error: 'Email Not Confirmed'} ;
