@@ -49,7 +49,7 @@ export async function getEarnings() {
       ?.filter(
         (invoice) => new Date(invoice.created_at).getMonth() + 1 === month
       )
-      .reduce((sum, invoice) => sum + invoice.amount, 0) ?? 0;
+      .reduce((sum, invoice) => sum + (invoice.amount ?? 0), 0);
 
     const monthName = new Date(currentYear, i).toLocaleString("default", {
       month: "short",
@@ -63,4 +63,40 @@ export async function getEarnings() {
 
   return earningsByMonth.slice(0, currentMonth + 1);
 }
+
+export const getAllInvoices = async () => {
+  const supabase = await createClient();
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !userData?.user?.id) {
+    throw new Error("User not authenticated");
+  }
+
+  const { data: invoices, error } = await supabase
+    .from("invoices")
+    .select("*")
+    .eq("user_id", userData.user.id);
+
+  if (error) {
+    return { data : null,  error: error.message }
+  }
+
+  return {data : invoices, error : null} ;
+};
+
+export const getInvoice = async (invoiceId: number) => {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("invoices")
+    .select("*")
+    .eq("id", invoiceId)
+    .maybeSingle(); 
+
+  if (error) {
+    return { data: null, error: error.message };
+  }
+
+  return { data, error: null };
+};
 

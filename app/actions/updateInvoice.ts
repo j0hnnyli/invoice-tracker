@@ -4,57 +4,58 @@ import { invoiceSchema } from "@/lib/schema/invoiceSchema";
 import { revalidatePath } from "next/cache";
 import { createClient } from '@/utils/supabase/server'
 
-export async function createInvoice(formData : FormData) : Promise<{error:string, success : string}>{
+export async function updateInvoice(formData : FormData) : Promise<{ error: string, success: string }> {
   const invoiceItemsRaw = formData.get("invoice_items");
+  const invoiceIdRaw = formData.get("invoice_id");
+  const invoiceId = Number(invoiceIdRaw);
 
   let invoiceItems = [];
   try {
     invoiceItems = JSON.parse(invoiceItemsRaw as string);
   } catch {
-    return { success: "", error: "Failed to parse invoice items" };
+    return { success: "", error: "Failed to parse invoice items." };
   }
 
   const rawData = {
     invoiceNumber: formData.get("invoice-number"),
-    name : formData.get("name"),
-    email : formData.get("email"),
-    address : formData.get("address"),
+    name: formData.get("name"),
+    email: formData.get("email"),
+    address: formData.get("address"),
     clientName: formData.get("client-name"),
     clientEmail: formData.get("client-email"),
     clientAddress: formData.get("client-address"),
     createdDate: formData.get("created-at"),
     dueDate: formData.get("due-date"),
-    descriptionRows : invoiceItems,
-    discountValue: formData.get("discount"),
+    descriptionRows: invoiceItems,
+    discountValue: formData.get("discount_amount"),
     discountType: formData.get("discount_type"),
     notes: formData.get("notes"),
-    amount: invoiceItems.reduce((sum : number, row: {amount : string}) => sum + parseFloat(row.amount || "0"), 0),
+    amount: invoiceItems.reduce((sum: number, row: { amount: string }) => sum + parseFloat(row.amount || "0"), 0),
   };
 
   const parsed = invoiceSchema.safeParse(rawData);
-
   if (!parsed.success) {
     const errorMessage = parsed.error.errors[0].message;
-    return {success : "", error: errorMessage };
+    return { success: "", error: errorMessage };
   }
 
   const validData = parsed.data;
 
   const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();  
+  const { data } = await supabase.auth.getUser();
 
   if (!data.user?.id) {
-    return { success: "", error: "User not authenticated" };
+    return { success: "", error: "User not authenticated." };
   }
 
   const invoiceNumber = parseInt(validData.invoiceNumber, 10);
 
   const dbPayload = {
     invoice_number: invoiceNumber,
-    user_id : data.user?.id,
-    name : data.user.user_metadata.display_name,
-    email : data.user.email,
-    address: validData.address, 
+    user_id: data.user?.id,
+    name: data.user.user_metadata.display_name,
+    email: data.user.email,
+    address: validData.address,
     client_name: validData.clientName,
     client_email: validData.clientEmail,
     client_address: validData.clientAddress,
@@ -65,14 +66,18 @@ export async function createInvoice(formData : FormData) : Promise<{error:string
     note: validData.notes,
     amount: validData.amount,
     invoice_items: validData.descriptionRows,
-    status : 'Open'
+    status: 'Open',
   };
 
-  const { error } = await supabase.from('invoices').insert(dbPayload)
+  const { error } = await supabase
+    .from('invoices')
+    .update(dbPayload)
+    .eq('id', invoiceId); 
 
-  if(error) return {success : "", error : error.message}
 
-  revalidatePath('/dashboard', 'layout')
-  revalidatePath('/invoices', 'page')
-  return {success : "Invoice Added", error : ""}
+  if (error) return { success: "", error: error.message };
+
+  revalidatePath('/dashboard', 'layout');
+  revalidatePath('/invoices', 'page');
+  return { success: "Invoice Updated", error: "" };
 }

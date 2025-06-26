@@ -5,7 +5,6 @@ import MediaNavBar from "./MediaNavBar";
 import { BorderBeam } from "@/components/magicui/border-beam";
 
 
-
 export default async function DashboardLayout({ children } : { children : ReactNode }){
   const user = await getUser();
 
