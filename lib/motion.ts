@@ -18,7 +18,8 @@ export const staggerContainer = (
 export const fadeIn = (
   direction: "left" | "right" | "up" | "down",
   type: "spring" | "tween",
-  duration?: number
+  duration?: number,
+  delay?:number
 ): Variants => ({
   hidden: {
     x: direction === "left" ? 100 : direction === "right" ? -100 : 0,
@@ -33,6 +34,7 @@ export const fadeIn = (
       type,
       duration,
       ease: easeOut, 
+      delay,
     },
   },
 });

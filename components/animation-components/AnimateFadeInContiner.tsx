@@ -8,14 +8,17 @@ type Props = {
   children : ReactNode;
   direction : "up" | "down" | "left" | "right";
   duration : number;
+  delay ?: number;
+  className?: string;
 }
 
-export default function FadeInContainer( { children, direction , duration} : Props ){
+export default function FadeInContainer( { children, direction , duration, delay, className} : Props ){
   return (
     <motion.div
-      variants={fadeIn(direction, 'tween', duration)}
+      variants={fadeIn(direction, 'tween', duration, delay)}
       initial="hidden"
       animate="show"
+      className={className}
     >
       { children }
     </motion.div>

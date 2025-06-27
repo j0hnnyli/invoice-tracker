@@ -6,6 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import CustomFormInput from "./CutomFormInput";
+import FadeInContainer from "@/components/animation-components/AnimateFadeInContiner";
 
 type FormInvoiceTotalSectionProps = {
   subtotal: string;
@@ -25,8 +26,14 @@ export default function FormInvoiceTotalSection({
   setDiscountValue,
 }: FormInvoiceTotalSectionProps) {
   return (
-    <section className="mt-5 flex flex-col md:flex-row items-center justify-between">
-      <div className="flex flex-col w-full md:w-1/2">
+    <section
+      className="mt-5 flex flex-col md:flex-row items-center justify-between"
+    >
+      <FadeInContainer 
+        direction="left"
+        duration={0.4}
+        className="flex flex-col w-full md:w-1/2"
+      >
         <label htmlFor="notes" className="playfair">
           Notes
         </label>
@@ -38,9 +45,14 @@ export default function FormInvoiceTotalSection({
           placeholder="notes . . ."
           className="outline-none"
         />
-      </div>
+      </FadeInContainer>
 
-      <div className="w-full md:w-1/3 flex flex-col gap-5">
+      <FadeInContainer 
+        direction="left"
+        duration={0.4} 
+        delay={0.2}
+        className="w-full md:w-1/3 flex flex-col gap-5"
+      >
         <div className="flex items-center justify-between w-full text-xl">
           <span className="playfair">Subtotal</span>
           <span>$ {subtotal}</span>
@@ -82,7 +94,7 @@ export default function FormInvoiceTotalSection({
           <span className="playfair"> Total</span>
           <span>$ {total.toString()} USD</span>
         </div>
-      </div>
+      </FadeInContainer>
     </section>
   );
 }

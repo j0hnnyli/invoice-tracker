@@ -6,7 +6,7 @@ import { Database } from "@/lib/types/supabase";
 export type InvoiceType = Database['public']['Tables']['invoices']['Row'];
 
 type InvoicePageProps = {
-  params : { [id : string] : string } 
+  params : Promise<{ id : string }> 
 }
 
 export const revalidate = 0;
