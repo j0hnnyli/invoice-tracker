@@ -18,19 +18,12 @@ export async function getUser() {
 export async function getEarnings() {
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) return [];
-
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
 
   const { data, error } = await supabase
     .from("invoices")
     .select("amount, created_at")
-    .eq("user-id", user.id)
     .eq("status", "paid");
 
   if (error) {
@@ -66,16 +59,10 @@ export async function getEarnings() {
 
 export const getAllInvoices = async () => {
   const supabase = await createClient();
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-
-  if (userError || !userData?.user?.id) {
-    throw new Error("User not authenticated");
-  }
 
   const { data: invoices, error } = await supabase
     .from("invoices")
     .select("*")
-    .eq("user_id", userData.user.id);
 
   if (error) {
     return { data : null,  error: error.message }
@@ -100,3 +87,67 @@ export const getInvoice = async (invoiceId: number) => {
   return { data, error: null };
 };
 
+export const getRecentOpenInvoices = async () => {
+  const supabase = await createClient();
+
+
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const isoDate = thirtyDaysAgo.toISOString();
+
+  const { data, error } = await supabase
+  .from('invoices')
+  .select('*')
+  .eq('status', 'Open')
+  .gte('created_at', isoDate);
+
+  if(error){
+    return { data : null, error : error.message}
+  }
+
+  return { data , error : null}
+}
+
+export const getRecentOverdueInvoices = async () => {
+  const supabase = await createClient();
+
+
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const isoDate = thirtyDaysAgo.toISOString();
+
+  const { data, error } = await supabase
+  .from('invoices')
+  .select('*')
+  .eq('status', 'Overdue')
+  .gte('created_at', isoDate);
+
+  if(error){
+    return { data : null, error : error.message}
+  }
+
+  return { data , error : null}
+}
+
+export const getDashboardInfo = async () => {
+  const {data: invoices, error} = await getAllInvoices();
+
+  if(!invoices || error){
+    return {data: null, error : error}
+  }
+
+  const totalEarnings = invoices.filter(inv => inv.status === "Paid").reduce((sum, inv) => sum + (inv.amount || 0), 0);
+  const openInvoices = invoices.filter(inv => inv.status === 'Open');
+  const closedInvoices = invoices.filter(inv => inv.status === 'Paid');
+  const overdueInvoices = invoices.filter(inv => inv.status === 'Overdue');
+
+  return {
+    data : {
+      totalEarnings,
+      openInvoices,
+      closedInvoices,
+      overdueInvoices
+    },
+    error: null
+  }
+}

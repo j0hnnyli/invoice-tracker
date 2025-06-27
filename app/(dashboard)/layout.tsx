@@ -3,6 +3,7 @@ import { getUser } from "@/lib/supabaseDataFns";
 import SideBar from "./SideBar";
 import MediaNavBar from "./MediaNavBar";
 import { BorderBeam } from "@/components/magicui/border-beam";
+import AnimateDashboardPage from "@/components/animation-components/AnimateDashboardPage";
 
 
 export default async function DashboardLayout({ children } : { children : ReactNode }){
@@ -13,10 +14,10 @@ export default async function DashboardLayout({ children } : { children : ReactN
     <div className="dashboard_max_width mx-auto flex">
       <SideBar name={user?.user_metadata.display_name}/>
       <MediaNavBar />
-      <div className="m-5 p-5 bg-white/10 w-full rounded-lg text-white self-start relative mb-28 overflow-hidden">
+      <AnimateDashboardPage className="m-5 p-5 bg-white/10 w-full rounded-lg text-white self-start relative mb-28 overflow-hidden">
         <BorderBeam duration={6} size={200} />
         {children}
-      </div>
+      </AnimateDashboardPage>
     </div>
   )
 }

@@ -6,7 +6,7 @@ import AnimateForm from "@/components/animation-components/AnimateForms";
 import Image from "next/image";
 
 type Props = {
-  searchParams: { mode?: string };
+  searchParams: Promise<{ mode?: string }>;
 };
 
 export default async function Login({ searchParams }: Props) {

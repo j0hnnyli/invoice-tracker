@@ -3,15 +3,16 @@ import InvoiceControls from "./InvoiceControls";
 import InvoiceFilter from "./InvoiceFilter";
 import Link from "next/link";
 import { getAllInvoices } from "@/lib/supabaseDataFns";
+import FadeInContainer from "@/components/animation-components/AnimateFadeInContiner";
 
 const statusColors: Record<string, string> = {
   Paid: "text-green-400 bg-green-400/10",
   Open: "text-yellow-400 bg-yellow-400/10",
-  Overdue: "text-red-400 bg-red-400/10",
+  Overdue: "text-red-500 bg-red-400/10",
 };
 
 type Props = {
-  searchParams : { filter? : string}
+  searchParams : Promise<{ filter? : string}>
 }
 
 export default async function Invoices({ searchParams } : Props) {
@@ -26,10 +27,22 @@ export default async function Invoices({ searchParams } : Props) {
   return (
     <div className="text-white">
       <div className="flex items-center justify-between mb-5">
-        <InvoiceFilter />
-        <Link href="/invoices/new" className="p-2 rounded-full bg-white/20 hover:bg-white/10">
-          <FaPlus className="text-xl" />
-        </Link>
+        <FadeInContainer
+          duration={0.4}
+          direction="left"
+        >
+          <InvoiceFilter />
+        </FadeInContainer>
+        <FadeInContainer
+          duration={0.4}
+          direction="left"
+          delay={0.2}
+          className="flex items-center justify-center"
+        >
+          <Link href="/invoices/new" className="p-2 rounded-full bg-white/20 hover:bg-white/10">
+            <FaPlus className="text-xl" />
+          </Link>
+        </FadeInContainer>
       </div>
 
       {error ? (
@@ -43,8 +56,11 @@ export default async function Invoices({ searchParams } : Props) {
         )
       }
 
-      {filtered?.map((invoice) => (
-          <div
+      {filtered?.map((invoice, i) => (
+          <FadeInContainer
+            duration={0.4}
+            direction="left"
+            delay={i * 0.2}
             key={invoice.id}
             className="bg-white/20 rounded-lg p-4 flex flex-col md:flex-row items-center justify-between mb-4"
           >
@@ -67,7 +83,7 @@ export default async function Invoices({ searchParams } : Props) {
 
               <InvoiceControls id={invoice.id}/>
             </div>
-          </div>
+          </FadeInContainer>
         ))
       }
  

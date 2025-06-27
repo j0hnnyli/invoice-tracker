@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import FormDateSelectSection from "./FormDateSelectSection";
 import FormInvoiceTotalSection from "./FormInvoiceTotalSection";
 import { Database } from '@/lib/types/supabase';
+import FadeInContainer from "@/components/animation-components/AnimateFadeInContiner";
+
 
 export type InvoiceType = Database['public']['Tables']['invoices']['Row'];
 
@@ -156,8 +158,13 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
   };
 
   return (
-    <form onSubmit={(e) => handleSubmit(e)}>
-      <div>
+    <form 
+      onSubmit={(e) => handleSubmit(e)}
+    >
+      <FadeInContainer
+        direction="left"
+        duration={0.4}
+      >
         <label htmlFor="invoice-number" className="text-lg playfair">
           Invoice No. *
         </label>
@@ -171,19 +178,28 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
             placeholder="5"
           />
         </div>
-      </div>
+      </FadeInContainer>
 
       <section className="flex flex-col md:flex-row gap-5 w-full lg:w-3/4 mt-5">
-        <div className="w-full">
+        <FadeInContainer 
+          direction="left"
+          duration={0.4}
+          className="w-full"
+        >
           <h2 className="playfair">From :</h2>
           <div className="flex flex-col gap-5">
             <CustomFormInput defaultValue={initialFormValues?.name || ""} placeholder="Your Name *" name="name" />
             <CustomFormInput defaultValue={initialFormValues?.email || ""}  placeholder="Your Email *" name="email" />
             <CustomFormInput defaultValue={initialFormValues?.address || ""} placeholder="Your Address" name="address" />
           </div>
-        </div>
+        </FadeInContainer>
 
-        <div className="w-full">
+        <FadeInContainer
+          direction="left"
+          duration={0.4}
+          delay={0.2}
+          className="w-full"
+        >
           <h2 className="playfair">To :</h2>
           <div className="flex flex-col gap-5">
             <CustomFormInput defaultValue={initialFormValues?.client_name || ""} placeholder="Client Name *" name="client-name" />
@@ -194,7 +210,7 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
             />
             <CustomFormInput defaultValue={initialFormValues?.client_address || ""} placeholder="Client Address" name="client-address"/>
           </div>
-        </div>
+        </FadeInContainer>
       </section>
 
       <FormDateSelectSection
@@ -209,17 +225,23 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
         <div className="mt-5">
           <div>
             {rows.map((row, index) => (
-              <DescriptionRow
+              <FadeInContainer
                 key={index}
-                totalRows={rows.length}
-                description={row.description}
-                index={index}
-                quantity={row.quantity}
-                rate={row.rate}
-                amount={row.amount}
-                onChange={handleRowChange}
-                onClick={() => removeRow(index)}
-              />
+                duration={0.4}
+                direction="left"
+                delay={index * 0.2}
+              >
+                <DescriptionRow
+                  totalRows={rows.length}
+                  description={row.description}
+                  index={index}
+                  quantity={row.quantity}
+                  rate={row.rate}
+                  amount={row.amount}
+                  onChange={handleRowChange}
+                  onClick={() => removeRow(index)}
+                />
+              </FadeInContainer>
             ))}
           </div>
         </div>
@@ -242,13 +264,17 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
         setDiscountType={setDiscountType}
       />
 
-      <div className="flex gap-5 items-center mt-10">
+      <FadeInContainer 
+        direction="left"
+        duration={0.4}
+        className="flex gap-5 items-center mt-10"
+      >
         <HoverAction type="submit" className="cursor-pointer">
          {initialFormValues ? "Submit Updates" : "Submit to Client"}
         </HoverAction>
         {isLoading && <CgSpinnerTwoAlt className="animate-spin" />}
-      </div>
-      <p className="text-red-500 mt-5 playfair font-bold">{errorMsg}</p>
+        {errorMsg && <p className="text-red-500 playfair font-bold">{errorMsg}</p>}
+      </FadeInContainer>
     </form>
   );
 }
