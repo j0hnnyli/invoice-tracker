@@ -16,6 +16,7 @@ export type Database = {
           client_address: string | null
           client_email: string | null
           client_name: string | null
+          closed_at: string | null
           created_at: string
           discount_type: string | null
           discount_value: string | null
@@ -27,7 +28,7 @@ export type Database = {
           name: string | null
           note: string | null
           status: string | null
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           address?: string | null
@@ -35,6 +36,7 @@ export type Database = {
           client_address?: string | null
           client_email?: string | null
           client_name?: string | null
+          closed_at?: string | null
           created_at?: string
           discount_type?: string | null
           discount_value?: string | null
@@ -46,7 +48,7 @@ export type Database = {
           name?: string | null
           note?: string | null
           status?: string | null
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           address?: string | null
@@ -54,6 +56,7 @@ export type Database = {
           client_address?: string | null
           client_email?: string | null
           client_name?: string | null
+          closed_at?: string | null
           created_at?: string
           discount_type?: string | null
           discount_value?: string | null
@@ -65,7 +68,7 @@ export type Database = {
           name?: string | null
           note?: string | null
           status?: string | null
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: []
       }

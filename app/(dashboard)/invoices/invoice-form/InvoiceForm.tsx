@@ -9,7 +9,9 @@ import { toast } from "sonner";
 import FormDateSelectSection from "./FormDateSelectSection";
 import FormInvoiceTotalSection from "./FormInvoiceTotalSection";
 import { Database } from '@/lib/types/supabase';
+import { FaArrowLeftLong } from "react-icons/fa6";
 import FadeInContainer from "@/components/animation-components/AnimateFadeInContiner";
+import Link from "next/link";
 
 
 export type InvoiceType = Database['public']['Tables']['invoices']['Row'];
@@ -161,24 +163,38 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
     <form 
       onSubmit={(e) => handleSubmit(e)}
     >
-      <FadeInContainer
-        direction="left"
-        duration={0.4}
-      >
-        <label htmlFor="invoice-number" className="text-lg playfair">
-          Invoice No. *
-        </label>
-        <div className="flex border w-fit rounded-lg">
-          <span className="p-2 border-r bg-white/20 "> # </span>
-          <input
-            type="number"
-            name="invoice-number"
-            defaultValue={initialFormValues?.invoice_number || ""}
-            className="p-1 outline-none"
-            placeholder="5"
-          />
-        </div>
-      </FadeInContainer>
+      <div className="flex items-center justify-between">
+        <FadeInContainer
+          direction="left"
+          duration={0.4}
+        >
+          <label htmlFor="invoice-number" className="text-lg playfair">
+            Invoice No. *
+          </label>
+          <div className="flex border w-fit rounded-lg">
+            <span className="p-2 border-r bg-white/20 "> # </span>
+            <input
+              type="number"
+              name="invoice-number"
+              defaultValue={initialFormValues?.invoice_number || ""}
+              className="p-1 outline-none"
+              placeholder="5"
+            />
+          </div>
+        </FadeInContainer>
+        
+        <FadeInContainer
+          direction="left"
+          duration={0.4}
+          className="flex items-center justify-center"
+        >
+          <Link href="/invoices"
+            className="p-2 rounded-lg bg-white/20 hover:bg-white/10"
+          >
+            <FaArrowLeftLong/>
+          </Link>
+        </FadeInContainer>
+      </div>
 
       <section className="flex flex-col md:flex-row gap-5 w-full lg:w-3/4 mt-5">
         <FadeInContainer 

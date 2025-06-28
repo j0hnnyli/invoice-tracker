@@ -38,7 +38,7 @@ export default function StepSection() {
         variants={staggerContainer(0.2, 0.2)} 
         initial="hidden"
         whileInView="show"
-        viewport={{ once : true, amount: 0.25}}
+        viewport={{ once : false, amount: 0.25}}
         className="relative border-l-2 border-white/20 pl-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
       >
         {steps.map(({step, icon : Icon, description}, i) => (
