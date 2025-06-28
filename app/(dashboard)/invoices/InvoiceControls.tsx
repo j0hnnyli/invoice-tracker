@@ -8,25 +8,26 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useState, useTransition } from "react"
 import { HiOutlineDotsHorizontal } from "react-icons/hi"
-// import { updateStatus } from "@/app/actions/updateStatus"
+import { updateStatus } from "@/app/actions/updateStatus"
 // import { deleteInvoice } from "@/app/actions/deleteInvoice"
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { useRouter } from "next/navigation"
 
 type InvoiceControlsProps = {
-  id : number
+  id : number;
+  invoiceStatus : string;
 }
 
-export default function InvoiceControls({ id } : InvoiceControlsProps){
+export default function InvoiceControls({ id, invoiceStatus } : InvoiceControlsProps){
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [status, setStatus] = useState<"Paid" | "Delete" | null>(null);
+  const [status, setStatus] = useState<"Paid" | "Delete" | "Open" | null>(null);
   const [open, setOpen] = useState(false);
 
-  const handleUpdateStatus = () => {
-    setStatus('Paid')
+  const handleUpdateStatus = (status : "Open" | "Paid") => {
+    setStatus(status)
     startTransition(async () => {
-      // await updateStatus("Paid", id)
+      await updateStatus(status, id)
       setOpen(false) 
       setStatus(null);
     })
@@ -51,13 +52,13 @@ export default function InvoiceControls({ id } : InvoiceControlsProps){
         <DropdownMenuItem 
           onSelect={(e) => {
             e.preventDefault()
-            handleUpdateStatus()
+            handleUpdateStatus(invoiceStatus === "Open" ? "Paid" : "Open")
           }}
-          disabled={status === "Paid"}
+          disabled={status === "Paid" || status === "Open"}
           className="text-lg hover:bg-white/20 flex items-center justify-between cursor-pointer"
         >
-          <span>Paid</span>
-          <span>{status === "Paid" && <CgSpinnerTwoAlt className="animate-spin"/>}</span>
+          <span>{invoiceStatus === "Open" ? "Paid" : "Reopen"}</span>
+          <span>{(status === "Paid" || status === "Open") && <CgSpinnerTwoAlt className="animate-spin"/>}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => router.push(`/invoices/${id}`)}

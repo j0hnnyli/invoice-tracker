@@ -23,15 +23,15 @@ export async function getEarnings() {
 
   const { data, error } = await supabase
     .from("invoices")
-    .select("amount, created_at")
-    .eq("status", "paid");
+    .select("amount, closed_at")
+    .eq("status", "Paid");
 
   if (error) {
     throw new Error(error.message);
   }
 
   const filtered = data?.filter((invoice) => {
-    const invoiceYear = new Date(invoice.created_at).getFullYear();
+    const invoiceYear = new Date(invoice.closed_at || "").getFullYear();
     return invoiceYear === currentYear;
   });
 
@@ -40,7 +40,7 @@ export async function getEarnings() {
     const month = i + 1;
     const monthlyTotal = filtered
       ?.filter(
-        (invoice) => new Date(invoice.created_at).getMonth() + 1 === month
+        (invoice) => new Date(invoice.closed_at || "").getMonth() + 1 === month
       )
       .reduce((sum, invoice) => sum + (invoice.amount ?? 0), 0);
 

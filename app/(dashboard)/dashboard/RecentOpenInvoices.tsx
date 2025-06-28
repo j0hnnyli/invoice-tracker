@@ -1,6 +1,5 @@
 import { getRecentOpenInvoices } from "@/lib/supabaseDataFns"
 import Link from "next/link";
-import { twMerge } from "tailwind-merge";
 
 export default async function RecentOpenInvoices(){
   const {data, error} = await getRecentOpenInvoices();
@@ -26,12 +25,11 @@ export default async function RecentOpenInvoices(){
               <div>
                 <h2>{invoice.client_name}</h2>
                 <p className="text-gray-300 text-xs">{invoice.client_email}</p>
-                <p className={twMerge("text-xs",
-                    invoice.status === "Open" && "text-yellow-400",
-                    invoice.status === "Overdue" && "text-red-400",
-                  )}
-                >
-                  {invoice.status}
+                <p 
+                  className="text-yellow-400 text-xs"
+                > 
+                  Created at : 
+                  {new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(new Date(invoice.created_at))}
                 </p>
               </div>
 
