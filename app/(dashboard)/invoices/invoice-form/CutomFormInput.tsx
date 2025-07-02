@@ -1,3 +1,4 @@
+import { RefObject } from "react";
 import { twMerge } from "tailwind-merge";
 
 type TextInputProps = {
@@ -8,7 +9,7 @@ type TextInputProps = {
   id?: string;
   readOnly?: boolean;
   value?: string;
-  defaultValue?: string;
+  inputRef? : RefObject<HTMLInputElement | null>;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -20,17 +21,17 @@ export default function CustomFormInput({
   id,
   readOnly,
   value,
-  defaultValue,
   onChange,
+  inputRef,
 }: TextInputProps) {
   return (
     <input
+      ref={inputRef}
       type={type}
       name={name}
       id={id}
       placeholder={placeholder}
       readOnly={readOnly}
-      defaultValue={defaultValue}
       value={value}
       onChange={onChange}
       className={twMerge("outline-none border-b py-1 w-full", className)}

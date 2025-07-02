@@ -44,21 +44,21 @@ export default async function Invoices({ searchParams }: Props) {
         </FadeInContainer>
       </div>
 
-      {error ? (
+      {error && (
         <div className="flex flex-col items-center justify-center text-center text-white py-10">
           <h2 className="text-3xl font-bold mb-2 playfair text-red-500">
             {error}
           </h2>
         </div>
-      ) : (
-        filtered?.length === 0 && (
+      )} 
+      {filtered?.length === 0 && (
           <div className="flex flex-col items-center justify-center text-center text-white py-10">
             <h2 className="text-3xl font-bold mb-2 playfair">
               No {filter} Invoices
             </h2>
           </div>
         )
-      )}
+      }
 
       {filtered?.map((invoice, i) => (
         <FadeInContainer
@@ -68,11 +68,14 @@ export default async function Invoices({ searchParams }: Props) {
           key={invoice.id}
           className="bg-white/20 rounded-lg p-4 flex flex-col md:flex-row items-center justify-between mb-4"
         >
-          <div className="w-full flex flex-row md:flex-col items-center justify-between md:items-start md:justify-start">
-            <p className="text-lg font-semibold playfair">
-              {invoice.client_name}
-            </p>
-            <p className="text-sm text-white/60">{invoice.client_email}</p>
+          <div className="w-full flex flex-row md:flex-col items-center justify-between md:items-start md:justify-start ">
+            <div>
+              <p># {invoice.id}</p>
+              <p className="text-lg font-semibold playfair">
+                {invoice.client_name}
+              </p>
+              <p className="text-sm text-white/60">{invoice.client_email}</p>
+            </div>
             <p className={
               twMerge("text-sm text-white/60", 
                   invoice.status === "Paid" && "text-green-400",
@@ -104,7 +107,7 @@ export default async function Invoices({ searchParams }: Props) {
               {invoice.status}
             </p>
 
-            <InvoiceControls id={invoice.id} invoiceStatus={invoice.status!} />
+            <InvoiceControls invoice={invoice}/>
           </div>
         </FadeInContainer>
       ))}

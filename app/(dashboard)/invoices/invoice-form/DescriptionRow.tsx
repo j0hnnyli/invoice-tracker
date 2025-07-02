@@ -35,7 +35,7 @@ export default function DescriptionRow({
       )}
     >
       <div className="flex flex-col gap-2">
-        <label htmlFor={`description-${index}`} className="playfair">
+        <label htmlFor={`description-${index}`} className="playfair text-sm">
           Description *
         </label>
         <textarea
@@ -49,9 +49,9 @@ export default function DescriptionRow({
         />
       </div>
 
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols-4 gap-7">
         <div className="flex flex-col gap-2">
-          <label htmlFor={`quantity-${index}`} className="playfair">
+          <label htmlFor={`quantity-${index}`} className="playfair text-sm">
             Quantity
           </label>
           <CustomFormInput
@@ -65,7 +65,7 @@ export default function DescriptionRow({
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor={`rate-${index}`} className="playfair">
+          <label htmlFor={`rate-${index}`} className="playfair text-sm">
             Rate
           </label>
           <CustomFormInput
@@ -79,8 +79,9 @@ export default function DescriptionRow({
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor={`amount-${index}`} className="playfair">
-            Amount *
+          <label htmlFor={`amount-${index}`} className="playfair text-sm flex">
+            <span>Amount</span> 
+            <span>*</span> 
           </label>
           <CustomFormInput
             type="number"
@@ -96,7 +97,7 @@ export default function DescriptionRow({
           <button
             type="button"
             onClick={onClick}
-            className="hover:text-red-800 text-red-500 cursor-pointer"
+            className="hover:text-red-800 text-red-500 cursor-pointer flex items-center justify-center"
           >
             <FaRegTrashAlt className="" />
           </button>

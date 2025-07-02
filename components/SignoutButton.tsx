@@ -7,15 +7,17 @@ import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { twMerge } from "tailwind-merge";
 
 type Props = {
-  className ?: string;
-}
+  className?: string;
+  onComplete?: () => void;
+};
 
-export default function SignoutButton({ className } : Props) {
+export default function SignoutButton({ className, onComplete } : Props) {
   const [isPending, startTransition] = useTransition();
 
   async function handleSignout() {
     startTransition(async () => {
       await signout();
+      onComplete?.();
     });
   }
 
@@ -26,9 +28,9 @@ export default function SignoutButton({ className } : Props) {
       disabled={isPending}
     >
       {isPending ? (
-        <CgSpinnerTwoAlt className="text-3xl animate-spin" />
+        <CgSpinnerTwoAlt className="text-xl md:text-3xl animate-spin" />
       ) : (
-        <PiSignOutFill className="text-3xl" />
+        <PiSignOutFill className="text-xl md:text-3xl" />
       )}
       <p className="text-xl">Sign Out</p>
     </button>
