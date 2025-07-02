@@ -1,9 +1,7 @@
 import { getInvoice } from "@/lib/supabaseDataFns";
 import InvoiceForm from "../invoice-form/InvoiceForm";
 import { updateInvoice } from "@/app/actions/updateInvoice";
-import { Database } from "@/lib/types/supabase";
 
-export type InvoiceType = Database['public']['Tables']['invoices']['Row'];
 
 type InvoicePageProps = {
   params : Promise<{ id : string }> 

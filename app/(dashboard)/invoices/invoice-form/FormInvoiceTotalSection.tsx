@@ -14,14 +14,16 @@ type FormInvoiceTotalSectionProps = {
   discountValue: string;
   setDiscountValue: (char: string) => void;
   total: number;
-  noteDefaultValue ?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
 export default function FormInvoiceTotalSection({
   subtotal,
   discountValue,
   total,
-  noteDefaultValue,
+  value,
+  onChange,
   setDiscountType,
   setDiscountValue,
 }: FormInvoiceTotalSectionProps) {
@@ -41,7 +43,8 @@ export default function FormInvoiceTotalSection({
           id="notes"
           name="notes"
           rows={2}
-          defaultValue={noteDefaultValue}
+          value={value}
+          onChange={onChange}
           placeholder="notes . . ."
           className="outline-none"
         />

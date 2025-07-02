@@ -9,16 +9,21 @@ import {
 import { useState, useTransition } from "react"
 import { HiOutlineDotsHorizontal } from "react-icons/hi"
 import { updateStatus } from "@/app/actions/updateStatus"
-// import { deleteInvoice } from "@/app/actions/deleteInvoice"
+import { FaPencil } from "react-icons/fa6";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { MdPaid } from "react-icons/md";
+import { FaEnvelopeOpenText } from "react-icons/fa6";
+import { deleteInvoice } from "@/app/actions/deleteInvoice"
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { useRouter } from "next/navigation"
+import DownloadLink from "@/components/pdf/DownloadLink"
+import { InvoiceType } from "@/lib/types/invoiceType"
 
 type InvoiceControlsProps = {
-  id : number;
-  invoiceStatus : string;
+  invoice: Omit<InvoiceType, "closed_at" | "user_id"> ;
 }
 
-export default function InvoiceControls({ id, invoiceStatus } : InvoiceControlsProps){
+export default function InvoiceControls({ invoice } : InvoiceControlsProps){
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [status, setStatus] = useState<"Paid" | "Delete" | "Open" | null>(null);
@@ -27,7 +32,7 @@ export default function InvoiceControls({ id, invoiceStatus } : InvoiceControlsP
   const handleUpdateStatus = (status : "Open" | "Paid") => {
     setStatus(status)
     startTransition(async () => {
-      await updateStatus(status, id)
+      await updateStatus(status, invoice.id)
       setOpen(false) 
       setStatus(null);
     })
@@ -36,7 +41,7 @@ export default function InvoiceControls({ id, invoiceStatus } : InvoiceControlsP
   const handleDeleteInvoice = () => {
     setStatus('Delete')
     startTransition(async () => {
-      // await deleteInvoice(id)
+      await deleteInvoice(invoice.id)
       setOpen(false) 
       setStatus(null);
     })
@@ -52,21 +57,30 @@ export default function InvoiceControls({ id, invoiceStatus } : InvoiceControlsP
         <DropdownMenuItem 
           onSelect={(e) => {
             e.preventDefault()
-            handleUpdateStatus(invoiceStatus === "Open" ? "Paid" : "Open")
+            handleUpdateStatus(invoice.status === "Open" ? "Paid" : "Open")
           }}
           disabled={status === "Paid" || status === "Open"}
           className="text-lg hover:bg-white/20 flex items-center justify-between cursor-pointer"
         >
-          <span>{invoiceStatus === "Open" ? "Paid" : "Reopen"}</span>
+          <div className="flex items-center gap-2">
+            <span>{invoice.status === "Open" ? <MdPaid/> : <FaEnvelopeOpenText/>}</span>
+            <span>{invoice.status === "Open" ? "Paid" : "Reopen"}</span>
+          </div>
           <span>{(status === "Paid" || status === "Open") && <CgSpinnerTwoAlt className="animate-spin"/>}</span>
         </DropdownMenuItem>
+        
         <DropdownMenuItem
-          onSelect={() => router.push(`/invoices/${id}`)}
-          className="text-lg hover:bg-white/20 cursor-pointer" 
+          onSelect={() => router.push(`/invoices/${invoice.id}`)}
+          className="text-lg hover:bg-white/20 cursor-pointer flex items-center gap-2" 
         >
-          Update
+          <span><FaPencil/></span>
+          <span>Update</span>
         </DropdownMenuItem>
-        {/* <DropdownMenuItem className="text-lg hover:bg-white/20">Remind</DropdownMenuItem> */}
+        
+        <DropdownMenuItem className="hover:bg-white/20">
+          <DownloadLink data={invoice}/>
+        </DropdownMenuItem>
+        
         <DropdownMenuItem 
           onSelect={(e) => {
             e.preventDefault();
@@ -75,7 +89,10 @@ export default function InvoiceControls({ id, invoiceStatus } : InvoiceControlsP
           disabled={status === "Delete"}
           className="text-lg hover:bg-white/20 flex items-center justify-between cursor-pointer"
         >
-          <span>Delete</span>
+          <div className="flex items-center gap-2">
+            <span><FaRegTrashAlt className="text-red-400"/></span>
+            <span>Delete</span>
+          </div>
           <span>{status === "Delete" && <CgSpinnerTwoAlt className="animate-spin"/>}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

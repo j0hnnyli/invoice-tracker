@@ -1,15 +1,12 @@
 import { TbInvoice, TbMoneybag } from "react-icons/tb";
-import { FaRegBell, FaFolderOpen } from "react-icons/fa";
+import { FaFolderOpen } from "react-icons/fa";
+import { MdOutlineUpdate } from "react-icons/md";
 import { RiCashLine } from "react-icons/ri";
 
 export const whySectionInfo = [
   {
     icon : TbInvoice,
-    text : "Create and send professional invoices fast, easy, and client-ready in just minutes"
-  },
-  {
-    icon : FaRegBell,
-    text : "Easily send invoices via email to clients, vendors, or buyers and send reminders to follow up with just one click"
+    text : "Create professional invoices fast, easy, and client-ready in just minutes"
   },
   {
     icon : RiCashLine,
@@ -23,4 +20,8 @@ export const whySectionInfo = [
     icon : FaFolderOpen,
     text : "Easily manage all your invoices with just a few clicks: create, update, track, and organize everything without a hassle"
   },
+  {
+    icon: MdOutlineUpdate,
+    text: "Get automatic status updates for overdue invoices so you can stay on top of what's due"
+  }
 ]

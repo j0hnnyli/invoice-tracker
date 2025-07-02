@@ -8,13 +8,11 @@ import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { toast } from "sonner";
 import FormDateSelectSection from "./FormDateSelectSection";
 import FormInvoiceTotalSection from "./FormInvoiceTotalSection";
-import { Database } from '@/lib/types/supabase';
+import { InvoiceType } from "@/lib/types/invoiceType";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import FadeInContainer from "@/components/animation-components/AnimateFadeInContiner";
 import Link from "next/link";
-
-
-export type InvoiceType = Database['public']['Tables']['invoices']['Row'];
+import PreviewButton from "@/components/pdf/PreviewButton";
 
 type Row = {
   description: string;
@@ -24,31 +22,45 @@ type Row = {
 };
 
 type InvoiceFormProps = {
-  initialFormValues ?: InvoiceType | null;
-  submitAction : ( form : FormData ) => Promise<{error:string, success : string}>;
-}
+  initialFormValues?: InvoiceType | null;
+  submitAction: (form: FormData) => Promise<{ error: string; success: string }>;
+};
 
-export default function InvoiceForm( { initialFormValues, submitAction } : InvoiceFormProps ) {
-  //Dates Selections States
-  const [selectedDate, setSelectedDate] = useState<Date>(() =>  
-    initialFormValues?.created_at ? new Date(initialFormValues?.created_at) : new Date()
+export default function InvoiceForm({
+  initialFormValues,
+  submitAction,
+}: InvoiceFormProps) {
+  //Controlled States
+  const [invoiceNumber, setInvoiceNumber] = useState(initialFormValues?.invoice_number || "");
+  const [name, setName] = useState(initialFormValues?.name || "");
+  const [email, setEmail] = useState(initialFormValues?.email || "");
+  const [address, setAddress] = useState(initialFormValues?.address || "");
+  const [clientName, setClientName] = useState(initialFormValues?.client_name || "");
+  const [clientEmail, setClientEmail] = useState(initialFormValues?.client_email || "");
+  const [clientAddress, setClientAddress] = useState(initialFormValues?.client_address || "");
+  const [note, setNote] = useState(initialFormValues?.note || "");
+  const [selectedDate, setSelectedDate] = useState<Date>(() =>
+    initialFormValues?.created_at
+      ? new Date(initialFormValues.created_at)
+      : new Date()
   );
-  const [selectedDueDate, setSelectedDueDate] = useState<Date | undefined>(
-    () => initialFormValues?.due_date ? new Date(initialFormValues.due_date) : undefined
+  const [selectedDueDate, setSelectedDueDate] = useState<Date | undefined>(() =>
+    initialFormValues?.due_date
+      ? new Date(initialFormValues.due_date)
+      : undefined
   );
 
-  // Discount Value States
-  const [discountValue, setDiscountValue] = useState(() => initialFormValues?.discount_value || "");
-  const [discountType, setDiscountType] = useState(() => initialFormValues?.discount_type || "%");
+  const [discountValue, setDiscountValue] = useState(
+    initialFormValues?.discount_value || ""
+  );
+  const [discountType, setDiscountType] = useState(
+    initialFormValues?.discount_type || "%"
+  );
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Error and Loading States
-  const [errorMsg, setErrorMsg] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // Invoice Rows State and onChanfe function
   const [rows, setRows] = useState<Row[]>(() => {
     const items = initialFormValues?.invoice_items;
-
     if (Array.isArray(items)) {
       return (items as Row[]).map((item) => ({
         description: item.description,
@@ -57,44 +69,38 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
         amount: item.amount.toString(),
       }));
     }
-
     return [{ description: "", quantity: "0", rate: "0", amount: "0" }];
   });
-
-  function handleRowChange(
-    index: number,
-    field: "quantity" | "rate" | "amount" | "description",
-    value: string
-  ) {
+  
+  function handleRowChange(index: number, field: keyof Row, value: string) {
     setRows((prev) => {
       const updated = [...prev];
       const row = { ...updated[index], [field]: value };
-
       if (field === "quantity" || field === "rate") {
-        const qty = parseInt(row.quantity || "0");
-        const rt = parseInt(row.rate || "0");
-
-        if (!isNaN(qty) && !isNaN(rt) && (row.quantity || row.rate)) {
+        const qty = parseFloat(row.quantity);
+        const rt = parseFloat(row.rate);
+        if (!isNaN(qty) && !isNaN(rt)) {
           row.amount = (qty * rt).toFixed(2);
         } else {
           row.amount = "";
         }
       }
-
       updated[index] = row;
       return updated;
     });
   }
 
   function addRow() {
-    setRows((prev) => [...prev, { description: "", quantity: "0", rate: "0", amount: "0" }]);
+    setRows((prev) => [
+      ...prev,
+      { description: "", quantity: "0", rate: "0", amount: "0" },
+    ]);
   }
 
   function removeRow(index: number) {
     setRows((prev) => prev.filter((_, i) => i !== index));
   }
 
-  // Invoice Total Variables
   const subtotal = rows
     .reduce((sum, row) => {
       const amount = parseFloat(row.amount);
@@ -102,18 +108,16 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
     }, 0)
     .toFixed(2);
 
-  const subtotalNumber = parseFloat(subtotal || '0');
-  const discountNumber = parseFloat(discountValue || '0');
+  const subtotalNumber = parseFloat(subtotal || "0");
+  const discountNumber = parseFloat(discountValue || "0");
 
   const total =
     discountType === "$"
       ? subtotalNumber - discountNumber
       : subtotalNumber - (subtotalNumber * discountNumber) / 100;
 
-  // Submit Form Function
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const form = e.currentTarget;
     const formData = new FormData(form);
     formData.append("created-at", selectedDate.toISOString());
@@ -127,104 +131,106 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
     }
 
     setIsLoading(true);
-
     const result = await submitAction(formData);
-
     setIsLoading(false);
 
-    if (result.error.length > 0 ) {
-      setErrorMsg(result?.error);
+    if (result.error.length > 0) {
+      setErrorMsg(result.error);
       return;
     }
 
-    if(!initialFormValues){
+    if (!initialFormValues) {
       form.reset();
       setDiscountValue("");
       setDiscountType("$");
       setSelectedDate(new Date());
-      setErrorMsg("");
       setSelectedDueDate(undefined);
       setRows([{ description: "", quantity: "0", rate: "0", amount: "0" }]);
-  
-      toast.success("Invoice Sent", {
-        description: "Your Invoice was Sent to The Client",
-      });
-
-      return;
+      toast.success("Invoice Created");
+    } else {
+      toast.success("Invoice Updated");
     }
 
-    toast.success("Invoice Update", {
-      description: "Your Updated Invoice was Sent to The Client",
-    });
     setErrorMsg("");
   };
 
+
   return (
-    <form 
-      onSubmit={(e) => handleSubmit(e)}
-    >
+    <form onSubmit={handleSubmit}>
       <div className="flex items-center justify-between">
-        <FadeInContainer
-          direction="left"
-          duration={0.4}
-        >
+        <FadeInContainer direction="left" duration={0.4}>
           <label htmlFor="invoice-number" className="text-lg playfair">
             Invoice No. *
           </label>
           <div className="flex border w-fit rounded-lg">
-            <span className="p-2 border-r bg-white/20 "> # </span>
+            <span className="p-2 border-r bg-white/20">#</span>
             <input
               type="number"
               name="invoice-number"
-              defaultValue={initialFormValues?.invoice_number || ""}
+              value={invoiceNumber}
+              onChange={(e) => setInvoiceNumber(e.target.value)}
               className="p-1 outline-none"
               placeholder="5"
             />
           </div>
         </FadeInContainer>
-        
-        <FadeInContainer
-          direction="left"
-          duration={0.4}
-          className="flex items-center justify-center"
-        >
-          <Link href="/invoices"
+
+        <FadeInContainer direction="left" duration={0.4} className="flex">
+          <Link
+            href="/invoices"
             className="p-2 rounded-lg bg-white/20 hover:bg-white/10"
           >
-            <FaArrowLeftLong/>
+            <FaArrowLeftLong />
           </Link>
         </FadeInContainer>
       </div>
 
       <section className="flex flex-col md:flex-row gap-5 w-full lg:w-3/4 mt-5">
-        <FadeInContainer 
-          direction="left"
-          duration={0.4}
-          className="w-full"
-        >
+        <FadeInContainer direction="left" duration={0.4} className="w-full">
           <h2 className="playfair">From :</h2>
           <div className="flex flex-col gap-5">
-            <CustomFormInput defaultValue={initialFormValues?.name || ""} placeholder="Your Name *" name="name" />
-            <CustomFormInput defaultValue={initialFormValues?.email || ""}  placeholder="Your Email *" name="email" />
-            <CustomFormInput defaultValue={initialFormValues?.address || ""} placeholder="Your Address" name="address" />
+            <CustomFormInput
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your Name *"
+              name="name"
+            />
+            <CustomFormInput
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your Email *"
+              name="email"
+            />
+            <CustomFormInput
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Your Address"
+              name="address"
+            />
           </div>
         </FadeInContainer>
 
-        <FadeInContainer
-          direction="left"
-          duration={0.4}
-          delay={0.2}
-          className="w-full"
-        >
+        <FadeInContainer direction="left" duration={0.4} className="w-full">
           <h2 className="playfair">To :</h2>
           <div className="flex flex-col gap-5">
-            <CustomFormInput defaultValue={initialFormValues?.client_name || ""} placeholder="Client Name *" name="client-name" />
             <CustomFormInput
-              defaultValue={initialFormValues?.client_email || ""}
+              value={clientName}
+              onChange={(e) => setClientName(e.target.value)}
+              placeholder="Client Name *"
+              name="client-name"
+            />
+            <CustomFormInput
+              value={clientEmail}
+              onChange={(e) => setClientEmail(e.target.value)}
               placeholder="Client Email *"
               name="client-email"
             />
-            <CustomFormInput defaultValue={initialFormValues?.client_address || ""} placeholder="Client Address" name="client-address"/>
+            <CustomFormInput
+              value={clientAddress}
+              onChange={(e) => setClientAddress(e.target.value)}
+              placeholder="Client Address"
+              name="client-address"
+            />
           </div>
         </FadeInContainer>
       </section>
@@ -239,29 +245,26 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
       <section className="mt-5 w-full">
         <h2 className="text-4xl playfair">Invoice Items</h2>
         <div className="mt-5">
-          <div>
-            {rows.map((row, index) => (
-              <FadeInContainer
-                key={index}
-                duration={0.4}
-                direction="left"
-                delay={index * 0.2}
-              >
-                <DescriptionRow
-                  totalRows={rows.length}
-                  description={row.description}
-                  index={index}
-                  quantity={row.quantity}
-                  rate={row.rate}
-                  amount={row.amount}
-                  onChange={handleRowChange}
-                  onClick={() => removeRow(index)}
-                />
-              </FadeInContainer>
-            ))}
-          </div>
+          {rows.map((row, index) => (
+            <FadeInContainer
+              key={index}
+              duration={0.4}
+              direction="left"
+              delay={index * 0.2}
+            >
+              <DescriptionRow
+                totalRows={rows.length}
+                description={row.description}
+                index={index}
+                quantity={row.quantity}
+                rate={row.rate}
+                amount={row.amount}
+                onChange={handleRowChange}
+                onClick={() => removeRow(index)}
+              />
+            </FadeInContainer>
+          ))}
         </div>
-
         <button
           type="button"
           onClick={addRow}
@@ -275,22 +278,47 @@ export default function InvoiceForm( { initialFormValues, submitAction } : Invoi
         subtotal={subtotal}
         discountValue={discountValue}
         setDiscountValue={setDiscountValue}
-        noteDefaultValue={initialFormValues?.note || ""}
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
         total={total}
         setDiscountType={setDiscountType}
       />
 
-      <FadeInContainer 
+      <FadeInContainer
         direction="left"
         duration={0.4}
         className="flex gap-5 items-center mt-10"
       >
         <HoverAction type="submit" className="cursor-pointer">
-         {initialFormValues ? "Submit Updates" : "Submit to Client"}
+          {initialFormValues ? "Update Invoice" : "Create Invoice"}
         </HoverAction>
+
         {isLoading && <CgSpinnerTwoAlt className="animate-spin" />}
-        {errorMsg && <p className="text-red-500 playfair font-bold">{errorMsg}</p>}
+        {errorMsg && (
+          <p className="text-red-500 playfair font-bold">{errorMsg}</p>
+        )}
       </FadeInContainer>
+      
+      <PreviewButton
+        text="Preview"
+        data={{
+          invoice_number: Number(invoiceNumber),
+          client_name: clientName,
+          client_email: clientEmail,
+          client_address: clientAddress,
+          name: name,
+          email: email,
+          address: address,
+          created_at: selectedDate.toISOString(),
+          due_date: selectedDueDate?.toISOString() || "",
+          invoice_items: rows,
+          discount_value: discountValue,
+          discount_type: discountType,
+          note: note,
+          amount: total,
+          subtotal : subtotal,
+        }}
+      />
     </form>
   );
 }

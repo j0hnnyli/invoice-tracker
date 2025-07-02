@@ -13,8 +13,8 @@ const steps = [
     icon: FaClipboardList,
   },
   {
-    step: "Send Invoices",
-    description: "Easily create and send professional invoices to your clients in just a few clicks.",
+    step: "Create Invoices",
+    description: "Easily create professional invoices for your clients in just a few clicks.",
     icon: IoPeopleOutline,
   },
   {
@@ -45,13 +45,13 @@ export default function StepSection() {
           <motion.div
             key={step}
             variants={fadeIn('up', 'spring')}
-            className="relative"
+            className="relative h-[150px] bg-white/10 backdrop-blur-md p-5 rounded-xl shadow-xl border border-white/10"
           >
             <div className="absolute -left-3 -top-1 w-8 h-8 rounded-full bg-[var(--primary-color)] border-2 border-white/30 z-10 text-white flex items-center justify-center">
               {i + 1}
             </div>
 
-            <div className="bg-white/10 backdrop-blur-md p-5 rounded-xl shadow-xl border border-white/10 ">
+            <div>
               <div className="flex items-center gap-4 mb-2">
                 <Icon className="text-2xl text-[var(--primary-color)]" />
                 <h3 className="text-lg font-semibold playfair">{step}</h3>

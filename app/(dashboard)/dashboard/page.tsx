@@ -10,7 +10,6 @@ import { getDashboardInfo } from "@/lib/supabaseDataFns";
 import FadeInContainer from "@/components/animation-components/AnimateFadeInContiner";
 
 
-
 export default async function Dashboard(){
   const {data, error} = await getDashboardInfo();
 
@@ -48,6 +47,7 @@ export default async function Dashboard(){
       caption : 'Total Overdue Invoices',
     },
   ]
+  
   return (
     <div>
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-5">
@@ -66,7 +66,7 @@ export default async function Dashboard(){
                 <span className="text-lg"><Icon /></span>
               </p>
               <p className="text-xl">{i === 0 ? `$ ${total.toLocaleString()}` : total}</p>
-              <p className="text-gray-300 text-xs">{caption}</p>
+              <p className="text-gray-300 text-[10px]">{caption}</p>
             </div>
           </FadeInContainer>
         ))}
