@@ -78,7 +78,7 @@ export default function InvoiceControls({ invoice } : InvoiceControlsProps){
         </DropdownMenuItem>
         
         <DropdownMenuItem className="hover:bg-white/20">
-          <DownloadLink data={invoice}/>
+          <DownloadLink data={invoice} />
         </DropdownMenuItem>
         
         <DropdownMenuItem 

@@ -16,6 +16,7 @@ export default async function RecentOpenInvoices(){
       </div>
 
       {error && <p className="text-red-500">{error}</p>}
+      {data?.length === 0 && <p className="mt-5 text-gray-300">No Recent Open Invoices</p>}
       {data &&  (
         <div className="mt-5 flex gap-5 max-h-[500px] overflow-y-auto">
           {data?.map((invoice) => (

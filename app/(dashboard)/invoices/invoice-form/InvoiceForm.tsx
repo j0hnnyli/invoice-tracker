@@ -316,8 +316,8 @@ export default function InvoiceForm({
           discount_type: discountType,
           note: note,
           amount: total,
-          subtotal : subtotal,
         }}
+        subtotal={subtotal}
       />
     </form>
   );

@@ -43,7 +43,7 @@ export default function SignUpForm(){
             id="name"
             placeholder="Enter your Name . . ."
             onChange={resetError}
-            className="outline-none py-1"
+            className="outline-none py-1 w-full"
           />
         </AnimateBorderBottomComponent>
       </div>
@@ -57,7 +57,7 @@ export default function SignUpForm(){
             id="email"
             placeholder="Enter your Email . . ."
             onChange={resetError}
-            className="outline-none py-1"
+            className="outline-none py-1 w-full"
           />
         </AnimateBorderBottomComponent>
       </div>
