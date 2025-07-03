@@ -3,7 +3,7 @@
 import { ResponsiveContainer, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
 
 type Props = {
-  earnings : { month : string, earnings : number }[]
+  earnings : { month : string, earnings : number }[];
 }
 
 export default function ChartComponent( { earnings } : Props){

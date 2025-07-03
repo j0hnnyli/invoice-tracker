@@ -6,16 +6,11 @@ type Props = {
 };
 
 export default async function SignInDashboardLink({ text = "Sign In" }: Props) {
-  try {
-    const user = await getUser();
+  const user = await getUser();
 
-    if (user) {
-      return <HoverAction href="/dashboard">My Dashboard</HoverAction>;
-    }
-
-    return <HoverAction href="/login">{text}</HoverAction>;
-  } catch {
-
-    return <HoverAction href="/login">{text}</HoverAction>;
+  if (user) {
+    return <HoverAction href="/dashboard">My Dashboard</HoverAction>;
   }
+
+  return <HoverAction href="/login">{text}</HoverAction>;
 }
