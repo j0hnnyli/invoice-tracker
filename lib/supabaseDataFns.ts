@@ -27,7 +27,7 @@ export async function getEarnings() {
     .eq("status", "Paid");
 
   if (error) {
-    return null;
+    return [];
   }
 
   const filtered = data?.filter((invoice) => {
