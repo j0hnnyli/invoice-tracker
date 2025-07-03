@@ -1,18 +1,20 @@
-import { InvoiceType } from "@/lib/types/invoiceType";
+import { InvoiceType, InvoiceItem } from "@/lib/types/invoiceType";
 import {
   Document,
   Page,
   Text,
   View,
   StyleSheet,
+  Font
 } from "@react-pdf/renderer";
 
-type InvoiceItem = {
-  description: string;
-  rate: number;
-  quantity: number;
-  amount: number;
-}
+Font.register({
+  family: 'Playfair',
+  fonts: [
+    { src: '/fonts/playfair/Play-fair-font.ttf', fontWeight: 'normal' },
+    { src: '/fonts/playfair/Playfair-Italic.ttf', fontStyle: 'italic' },
+  ],
+});
 
 const styles = StyleSheet.create({
   page: {
@@ -21,6 +23,9 @@ const styles = StyleSheet.create({
   },
   fontBold: {
     fontWeight : "bold",
+  },
+  playfair:{
+    fontFamily: 'Playfair',
   },
   header: {
     fontSize: 36,
@@ -80,48 +85,47 @@ const styles = StyleSheet.create({
 
 type InvoiceDocumentProps = {
   data: Omit<InvoiceType, "closed_at" | "id" | "status" | "user_id">;
+  subtotal : string;
 };
 
-export default function InvoicePreview({ data }: InvoiceDocumentProps) {
+export default function InvoicePreview({ data, subtotal }: InvoiceDocumentProps) {
   const invoiceItems : InvoiceItem[] = 
   typeof data.invoice_items === "string" 
     ? JSON.parse(data.invoice_items) 
     : data.invoice_items;
 
-  const subtotal = invoiceItems.reduce((sum, item) => sum + item.amount, 0);
-
   return (
     <Document>
       <Page size="A4" orientation="portrait" style={styles.page}>
-        <View style={styles.header}>
+        <View style={[styles.header, styles.playfair]}>
           <Text style={styles.headerText}>Invoice</Text>
         </View>
        
         <View style={styles.sectionTo}>
           <View>
             <Text style={styles.fontBold}>Issue To:</Text>
-            <Text>{data.client_name}</Text>
-            <Text>{data.client_email}</Text>
-            <Text>{data.client_address}</Text>
+            <Text style={styles.playfair}>{data.client_name}</Text>
+            <Text style={styles.playfair}>{data.client_email}</Text>
+            <Text style={styles.playfair}>{data.client_address}</Text>
           </View>
           
           <View>
             <Text style={styles.fontBold}>Invoice No. #{data.invoice_number}</Text>
-            <Text>Date : {data.created_at && new Intl.DateTimeFormat("en-US", {dateStyle: "long"}).format(new Date(data.created_at))}</Text>
-            <Text>
+            <Text style={styles.playfair}>Date : {data.created_at && new Intl.DateTimeFormat("en-US", {dateStyle: "long"}).format(new Date(data.created_at))}</Text>
+            <Text style={styles.playfair}>
               Due Date:{" "}
               {data.due_date && !isNaN(new Date(data.due_date).getTime())
                 ? new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(new Date(data.due_date))
-                : "N/A"}
+                : ""}
             </Text>          
           </View>
         </View>
         
         <View style={styles.sectionPayTo}>
           <Text style={styles.fontBold}>Pay To:</Text>
-          <Text>{data.name}</Text>
-          <Text>{data.email}</Text>
-          <Text>{data.address}</Text>
+          <Text style={styles.playfair}>{data.name}</Text>
+          <Text style={styles.playfair}>{data.email}</Text>
+          <Text style={styles.playfair}>{data.address}</Text>
         </View>
         
         <View>
@@ -138,10 +142,10 @@ export default function InvoicePreview({ data }: InvoiceDocumentProps) {
                 key={invoice.description}
                 style={styles.invoiceItems}
               >
-                <Text style={styles.descriptionColumn}>{invoice.description}</Text> 
-                <Text style={styles.invoiceItem}>{invoice.quantity}</Text> 
-                <Text style={styles.invoiceItem}>{invoice.rate}</Text> 
-                <Text style={styles.invoiceItem}>{invoice.amount}</Text> 
+                <Text style={[styles.descriptionColumn, styles.playfair]}>{invoice.description}</Text> 
+                <Text style={[styles.invoiceItem, styles.playfair]}>{invoice.quantity}</Text> 
+                <Text style={[styles.invoiceItem, styles.playfair]}>{invoice.rate}</Text> 
+                <Text style={[styles.invoiceItem, styles.playfair]}>{invoice.amount}</Text> 
               </View>
             ))}
           </View>
@@ -156,15 +160,15 @@ export default function InvoicePreview({ data }: InvoiceDocumentProps) {
           <View>
             <View style={styles.totalSection}>
               <Text>Subtotal :</Text> 
-              <Text>{subtotal}</Text> 
+              <Text style={styles.playfair}>{subtotal}</Text> 
             </View>
             <View style={styles.totalSection}>
               <Text>Discount :</Text> 
-              <Text>{data.discount_type === '$' && data.discount_type} {data.discount_value || '0'} {data.discount_type === '%' && data.discount_type}</Text> 
+              <Text style={styles.playfair}>{data.discount_type === '$' && data.discount_type} {data.discount_value || '0'} {data.discount_type === '%' && data.discount_type}</Text> 
             </View>
             <View style={styles.totalSection}>
               <Text>Total :</Text> 
-              <Text>{data.amount?.toFixed(2)}</Text> 
+              <Text style={styles.playfair}>{data.amount?.toFixed(2)}</Text> 
             </View>
           </View>
         </View>

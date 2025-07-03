@@ -1,8 +1,7 @@
 'use server'
 
+import { resetPasswordSchema } from '@/lib/schema/resetSchema';
 import { createClient } from '@/utils/supabase/server'
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export async function sendResetPasswordEmail(formData : FormData){
   const email = formData.get('email') as string;
@@ -13,36 +12,40 @@ export async function sendResetPasswordEmail(formData : FormData){
 
   const supabase = await createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.APP_BASE_URL}/update-password`,
+    redirectTo: `${process.env.APP_BASE_URL}/resetpassword`,
   })
 
   if(error){
-    console.log(error)
     return {success: "", error : error.message}
   }
 
   return { success: "Reset Link Sent!", error: "" }
 }
 
-export async function resetPassword(formData : FormData){
+export async function resetPassword(formData : FormData, code : string){
   const newPassword = formData.get('new-password') as string;
   const confirmNewPassword = formData.get('confirm-new-password') as string;
 
-  if(!newPassword || !confirmNewPassword){
-    return {error : "Missing Credentials"}
-  }
+  const parseResult = resetPasswordSchema.safeParse({
+    password: newPassword,
+    confirmPassword: confirmNewPassword,
+  });
 
-  if(newPassword !== confirmNewPassword){
-    return {error : "Password Not Match"}
+  if (parseResult.error) {
+    const errors = parseResult.error.issues.map((issue) => issue.message)[0];
+    return { error: errors, success : "" };
   }
   
   const supabase = await createClient();
+  const {error : codeError} = await supabase.auth.exchangeCodeForSession(code)
+
+  if(codeError) return { error : codeError.message, success: "" }
+
   const { error } = await supabase.auth.updateUser({ password : newPassword })
 
   if(error){
-    return { error : error.message }
+    return { error : error.message, success: "" }
   }
 
-  revalidatePath("/dashboard", "layout")
-  redirect("/dashboard")
+  return {success : "Successfully Reset Password", error : ""}
 }

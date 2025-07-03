@@ -45,7 +45,7 @@ export default function LoginForm(){
               id="email"
               placeholder="Enter your Email . . ."
               onChange={resetError}
-              className="outline-none py-1"
+              className="outline-none py-1 w-full"
             />
           </AnimateBorderBottomComponent>
         </div>

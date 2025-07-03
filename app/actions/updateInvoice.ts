@@ -53,8 +53,8 @@ export async function updateInvoice(formData : FormData) : Promise<{ error: stri
   const dbPayload = {
     invoice_number: invoiceNumber,
     user_id: data.user?.id,
-    name: data.user.user_metadata.display_name,
-    email: data.user.email,
+    name: validData.name,
+    email: validData.email,
     address: validData.address,
     client_name: validData.clientName,
     client_email: validData.clientEmail,

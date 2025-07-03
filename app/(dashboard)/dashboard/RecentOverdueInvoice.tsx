@@ -16,7 +16,7 @@ export default async function RecentOverdueInvoices(){
       </div>
 
       {error && <p className="text-red-500 mt-5">{error}</p>}
-      {data?.length === 0 && <p className="mt-5">No Recent Overdue Invoices</p>}
+      {data?.length === 0 && <p className="mt-5 text-gray-300">No Recent Overdue Invoices</p>}
       {data &&  (
         <div className="mt-5 flex gap-5 max-h-[500px] overflow-y-auto">
           {data?.map((invoice) => (

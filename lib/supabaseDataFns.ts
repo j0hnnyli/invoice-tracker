@@ -8,8 +8,8 @@ export async function getUser() {
     error,
   } = await supabase.auth.getUser();
 
-  if (error) {
-    throw new Error(error.message);
+   if (error) {
+    return null; 
   }
 
   return user;
@@ -27,7 +27,7 @@ export async function getEarnings() {
     .eq("status", "Paid");
 
   if (error) {
-    throw new Error(error.message);
+    return null;
   }
 
   const filtered = data?.filter((invoice) => {

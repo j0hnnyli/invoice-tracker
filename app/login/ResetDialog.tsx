@@ -41,9 +41,9 @@ export default function ResetDialog(){
 
         <form onSubmit={(e) => handleSubmitReset(e)}>
           <div className="flex flex-col gap-2 border-b">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-2">
               <label htmlFor="email">Email : </label>
-              {state.error.length > 0 && <p className="text-red-500 font-bold">{state.error}*</p>}
+              {state.error.length > 0 && <p className="text-red-500 font-bold text-sm">{state.error}*</p>}
               {state.success.length > 0 && <p className="text-green-500 font-bold">{state.success}</p>}
             </div>
             <input 

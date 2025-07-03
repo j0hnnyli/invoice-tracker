@@ -52,11 +52,9 @@ export default async function Invoices({ searchParams }: Props) {
         </div>
       )} 
       {filtered?.length === 0 && (
-          <div className="flex flex-col items-center justify-center text-center text-white py-10">
-            <h2 className="text-3xl font-bold mb-2 playfair">
-              No {filter} Invoices
-            </h2>
-          </div>
+          <h2 className="text-3xl font-bold mb-2 playfair text-gray-300 py-10">
+            No {filter} Invoices
+          </h2>
         )
       }
 
