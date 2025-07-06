@@ -29,6 +29,7 @@ export const invoiceSchema = z.object({
   discountType: z.enum(["$", "%"]).optional(),
   notes: z.string().optional(),
   amount: z.number().positive("Amount must be greater than 0"),
+  subtotal: z.number().positive("subtotal must be greater than 0"),
   address: z.string().optional(),
   clientAddress : z.string().optional(),
 });

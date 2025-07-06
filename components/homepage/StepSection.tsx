@@ -7,19 +7,19 @@ import { motion } from 'framer-motion';
 import { fadeIn, staggerContainer } from "@/lib/motion";
 
 const steps = [
-  {
+   {
     step: "Create Your Account",
-    description: "Sign up to access your personalized dashboard and start tracking your earnings effortlessly.",
+    description: "Sign up and access your personal dashboard to start managing invoices",
     icon: FaClipboardList,
   },
   {
-    step: "Create Invoices",
-    description: "Easily create professional invoices for your clients in just a few clicks.",
+    step: "Send Your First Invoice",
+    description: "Generate and send a professional invoice in just a few clicks",
     icon: IoPeopleOutline,
   },
   {
-    step: "Track & Manage with Ease",
-    description: "Monitor invoice status, manage payments, and stay organized all in one place.",
+    step: "Track & Get Paid",
+    description: "Easily monitor status, send reminders, and keep everything organized",
     icon: MdManageAccounts,
   },
 ];
