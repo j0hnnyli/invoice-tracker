@@ -21,7 +21,7 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "InvoTracker",
-  description: "Invoice Tracker made easy to track, build, and manage invoices to keepyour business organized",
+  description: "Invoice Tracker made simple effortlessly create, send, and manage your invoices to keep your earnings organized",
 };
 
 export default function RootLayout({
