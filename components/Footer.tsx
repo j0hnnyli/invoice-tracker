@@ -1,3 +1,4 @@
+import Link from "next/link";
 import HoverAction from "./HoverAction";
 
 export default function Footer() {
@@ -9,6 +10,16 @@ export default function Footer() {
         </h2>
         <p className="text-lg text-white/80">Get started in just minutes</p>
         <HoverAction href="/login">Sign Up Now</HoverAction>
+
+        <p className="text-sm text-white/60">
+          Questions?{" "}
+          <Link
+            href="mailto:invotrackerteam@gmail.com"
+            className="underline hover:text-white"
+          >
+            Contact us
+          </Link>
+        </p>
       </div>
 
       <div className="border-t border-white/10 py-6 text-sm text-white/50 text-center">

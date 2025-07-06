@@ -3,6 +3,7 @@
 import { invoiceSchema } from "@/lib/schema/invoiceSchema";
 import { revalidatePath } from "next/cache";
 import { createClient } from '@/utils/supabase/server'
+import { sendInvoiceEmail } from "@/lib/nodeMailerFns";
 
 export async function createInvoice(formData : FormData) : Promise<{error:string, success : string}>{
   const invoiceItemsRaw = formData.get("invoice_items");
@@ -13,6 +14,12 @@ export async function createInvoice(formData : FormData) : Promise<{error:string
   } catch {
     return { success: "", error: "Failed to parse invoice items" };
   }
+
+  const subtotal =  Number(formData.get("subtotal"))
+  const discountValue = Number(formData.get("discount"))
+  const totalAfterDiscount = formData.get("discount_type") === "$"
+    ? subtotal - discountValue
+    : subtotal - (subtotal * discountValue) / 100;
 
   const rawData = {
     invoiceNumber: formData.get("invoice-number"),
@@ -28,7 +35,8 @@ export async function createInvoice(formData : FormData) : Promise<{error:string
     discountValue: formData.get("discount"),
     discountType: formData.get("discount_type"),
     notes: formData.get("notes"),
-    amount: invoiceItems.reduce((sum : number, row: {amount : string}) => sum + parseFloat(row.amount || "0"), 0),
+    subtotal: subtotal,
+    amount: totalAfterDiscount,
   };
 
   const parsed = invoiceSchema.safeParse(rawData);
@@ -52,8 +60,8 @@ export async function createInvoice(formData : FormData) : Promise<{error:string
   const dbPayload = {
     invoice_number: invoiceNumber,
     user_id : data.user?.id,
-    name : data.user.user_metadata.display_name,
-    email : data.user.email,
+    name : validData.name,
+    email : validData.email,
     address: validData.address, 
     client_name: validData.clientName,
     client_email: validData.clientEmail,
@@ -64,13 +72,22 @@ export async function createInvoice(formData : FormData) : Promise<{error:string
     discount_type: validData.discountType,
     note: validData.notes,
     amount: validData.amount,
+    sub_total: validData.subtotal,
     invoice_items: validData.descriptionRows,
     status : 'Open'
   };
 
-  const { error } = await supabase.from('invoices').insert(dbPayload)
+  const { data: insertedInvoice, error } = await supabase.from('invoices').insert(dbPayload).select().single();
 
-  if(error) return {success : "", error : error.message}
+  if(error || !insertedInvoice) return {success : "", error : error.message}
+
+  await sendInvoiceEmail({
+    senderName: dbPayload.name,
+    senderEmail: dbPayload.email,
+    clientName: dbPayload.client_name,
+    clientEmail: dbPayload.client_email,
+    invoiceLink: `${process.env.APP_BASE_URL}/pdf/${insertedInvoice.id}`
+  });
 
   revalidatePath('/dashboard', 'layout')
   revalidatePath('/invoices', 'page')

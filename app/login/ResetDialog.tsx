@@ -60,7 +60,7 @@ export default function ResetDialog(){
             />
           </div>
           <button 
-            className="mt-2 w-full py-2 bg-white/10 hover:bg-white/20 cursor-pointer flex items-center justify-center playfair"
+            className="mt-2 w-full py-2 bg-white/10 hover:bg-white/20 cursor-pointer flex items-center justify-center playfair rounded"
           >
             {isLoading ? <CgSpinnerTwoAlt className="text-xl text-white animate-spin"/> : " Submit"}
           </button>

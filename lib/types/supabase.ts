@@ -28,6 +28,7 @@ export type Database = {
           name: string | null
           note: string | null
           status: string | null
+          sub_total: number | null
           user_id: string
         }
         Insert: {
@@ -48,6 +49,7 @@ export type Database = {
           name?: string | null
           note?: string | null
           status?: string | null
+          sub_total?: number | null
           user_id: string
         }
         Update: {
@@ -68,6 +70,7 @@ export type Database = {
           name?: string | null
           note?: string | null
           status?: string | null
+          sub_total?: number | null
           user_id?: string
         }
         Relationships: []

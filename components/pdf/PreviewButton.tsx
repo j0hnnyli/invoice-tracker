@@ -1,47 +1,36 @@
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import { PDFViewer } from "@react-pdf/renderer"
-import InvoicePreview from "./InvoicePreview"
+"use client";
+
 import { InvoiceType } from "@/lib/types/invoiceType";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+import PDFViewerComponent from "./PDFViewerComponent";
 
 type PreviewButtonProps = {
-  text : string;
-  data: Omit<InvoiceType, "closed_at" | "id" | "status" | "user_id">;
-  subtotal : string;
-}
+  data: Omit<InvoiceType, "id" | "user_id" | "status" | "closed_at">;
+};
 
-export default function PreviewButton({text, data, subtotal} : PreviewButtonProps){
+export default function PreviewButton({ data }: PreviewButtonProps) {
 
   return (
-    <Sheet>
-      <SheetTrigger className="p-2 rounded-lg bg-white/20 hover:bg-white/10 fixed  bottom-28 md:bottom-10 right-10">
-        {text}
-      </SheetTrigger>
-      <SheetContent className="bg-slate-800 text-white border-none  border border-white w-[90%]">
-          <SheetHeader>
-          <SheetTitle>Invoice Preview</SheetTitle>
-          <SheetDescription></SheetDescription>
-        </SheetHeader>
-        <PDFViewer
-          showToolbar={false}
-          style={{
-            width: "100%",
-            height: "540px",
-            border: "none",
-          }}
-        >   
-          <InvoicePreview
-            data={data}
-            subtotal={subtotal}
-          />
-        </PDFViewer>
-      </SheetContent>
-    </Sheet>
-  )
+    <Drawer>
+      <DrawerTrigger
+        className="p-2 rounded-lg bg-white/20 hover:bg-white/10 backdrop-blur-3xl fixed bottom-28 md:bottom-10 right-10"
+      >
+        Preview
+      </DrawerTrigger>
+      <DrawerContent className="bg-gradient-to-br from-[var(--primary-color)] via-[var(--secondary-color)] to-[var(--third-color)] text-white border-none">
+        <DrawerHeader>
+          <DrawerTitle className="playfair text-3xl">Invoice Preview</DrawerTitle>
+          <DrawerDescription className="text-gray-300">Make sure your invoice in perfect before sending</DrawerDescription>
+        </DrawerHeader>
+        <PDFViewerComponent data={data}/>
+      </DrawerContent>
+    </Drawer>
+  );
 }

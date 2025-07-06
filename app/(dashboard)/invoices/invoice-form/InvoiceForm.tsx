@@ -115,7 +115,7 @@ export default function InvoiceForm({
     discountType === "$"
       ? subtotalNumber - discountNumber
       : subtotalNumber - (subtotalNumber * discountNumber) / 100;
-
+      
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -124,6 +124,7 @@ export default function InvoiceForm({
     formData.append("due-date", selectedDueDate?.toISOString() || "");
     formData.append("discount_amount", discountValue);
     formData.append("discount_type", discountType);
+    formData.append("subtotal", subtotal);
     formData.append("invoice_items", JSON.stringify(rows));
 
     if (initialFormValues?.id) {
@@ -146,9 +147,13 @@ export default function InvoiceForm({
       setSelectedDate(new Date());
       setSelectedDueDate(undefined);
       setRows([{ description: "", quantity: "0", rate: "0", amount: "0" }]);
-      toast.success("Invoice Created");
+      toast.success("Invoice Sent", {
+        description: "Invoice has been sent"
+      });
     } else {
-      toast.success("Invoice Updated");
+      toast.success("Sent Updated Invoice", {
+        description : "Updated Invoice has benn sent"
+      });
     }
 
     setErrorMsg("");
@@ -290,7 +295,7 @@ export default function InvoiceForm({
         className="flex gap-5 items-center mt-10"
       >
         <HoverAction type="submit" className="cursor-pointer">
-          {initialFormValues ? "Update Invoice" : "Create Invoice"}
+          {initialFormValues ? "Send Updated Invoice" : "Send Invoice"}
         </HoverAction>
 
         {isLoading && <CgSpinnerTwoAlt className="animate-spin" />}
@@ -300,7 +305,6 @@ export default function InvoiceForm({
       </FadeInContainer>
       
       <PreviewButton
-        text="Preview"
         data={{
           invoice_number: Number(invoiceNumber),
           client_name: clientName,
@@ -316,9 +320,10 @@ export default function InvoiceForm({
           discount_type: discountType,
           note: note,
           amount: total,
+          sub_total: Number(subtotal),
         }}
-        subtotal={subtotal}
       />
+
     </form>
   );
 }

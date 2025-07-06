@@ -85,10 +85,9 @@ const styles = StyleSheet.create({
 
 type InvoiceDocumentProps = {
   data: Omit<InvoiceType, "closed_at" | "id" | "status" | "user_id">;
-  subtotal : string;
 };
 
-export default function InvoicePreview({ data, subtotal }: InvoiceDocumentProps) {
+export default function Invoice({ data }: InvoiceDocumentProps) {
   const invoiceItems : InvoiceItem[] = 
   typeof data.invoice_items === "string" 
     ? JSON.parse(data.invoice_items) 
@@ -154,13 +153,13 @@ export default function InvoicePreview({ data, subtotal }: InvoiceDocumentProps)
         <View style={styles.sectionNoteAndTotal}>
           <View style={styles.descriptionColumn}>
             <Text style={styles.fontBold}>Notes</Text>
-            <Text>{data.note}</Text>
+            <Text style={styles.playfair}>{data.note}</Text>
           </View>
 
           <View>
             <View style={styles.totalSection}>
               <Text>Subtotal :</Text> 
-              <Text style={styles.playfair}>{subtotal}</Text> 
+              <Text style={styles.playfair}>{data.sub_total?.toFixed(2)}</Text> 
             </View>
             <View style={styles.totalSection}>
               <Text>Discount :</Text> 
