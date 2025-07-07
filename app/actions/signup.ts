@@ -1,9 +1,9 @@
 'use server'
 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { signupSchema } from '@/lib/schema/signupSchema';
+import { redirect } from 'next/navigation';
 
 
 export async function signup(formData: FormData ) {
@@ -17,7 +17,7 @@ export async function signup(formData: FormData ) {
   const parsed = signupSchema.safeParse(rawData);
 
   if(parsed.error){
-    return {error : parsed.error.errors[0].message}
+    return {success: false, error : parsed.error.errors[0].message}
   }
 
   const supabase = await createClient()
@@ -33,10 +33,10 @@ export async function signup(formData: FormData ) {
   })
 
   if (error) {
-    return {error : error.message}
+    return {success: false, error : error.message}
   }
 
   revalidatePath('/dashboard', 'layout')
-  redirect('/dashboard')
-  return {error: ""}
+  redirect('/login')
+  return {success: true ,error: ""}
 }

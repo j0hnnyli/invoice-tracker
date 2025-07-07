@@ -1,12 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 
-export async function GET(req : NextRequest){
-  if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new NextResponse('Unauthorized', { status: 401 });
-  }
-
+export async function GET(){
   const supabase = await createClient();
 
   const { error } = await supabase
@@ -15,9 +11,10 @@ export async function GET(req : NextRequest){
     .lt("due_date", new Date().toISOString())
     .eq("status", "Open")
   
-    if(error){
-      return NextResponse.json({ error: error.message });
-    }
+  
+  if(error){
+    return NextResponse.json({ error: error.message });
+  }
 
-     return NextResponse.json({ message: 'Invoices marked as overdue where applicable' });
+  return NextResponse.json({ message: 'Invoices marked as overdue where applicable' });
 }

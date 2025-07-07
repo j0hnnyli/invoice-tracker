@@ -7,10 +7,12 @@ import Link from "next/link";
 import { signup } from "../actions/signup";
 import { FormEvent, useState } from "react";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
+import { toast } from "sonner";
 
 export default function SignUpForm(){
-  const [errorMsg, setErrorMsg] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [errorMsg, setErrorMsg] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e : FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,7 +22,14 @@ export default function SignUpForm(){
     const formData = new FormData(e.currentTarget);
     const result = await signup(formData);
     setErrorMsg(result.error);
+    setSuccess(result.success);
     setIsLoading(false);
+
+    if(success){
+      toast.success("Register Successful", {
+        description: "Please check your email for verification",
+      });
+    }
   }
 
   const resetError = () => {

@@ -4,11 +4,11 @@ const descriptionRowSchema = z.object({
   description: z.string().min(1, "Description is required"),
   quantity: z.preprocess(
     (val) => (val === "" ? undefined : Number(val)),
-    z.number().int().positive().optional()
+    z.number().int().min(0).optional()
   ),
   rate: z.preprocess(
     (val) => (val === "" ? undefined : Number(val)),
-    z.number().positive().optional()
+    z.number().min(0).optional()
   ),
   amount: z.preprocess(
     (val) => Number(val),

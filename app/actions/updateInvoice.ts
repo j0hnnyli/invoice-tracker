@@ -86,14 +86,14 @@ export async function updateInvoice(formData : FormData) : Promise<{ error: stri
 
   if (error) return { success: "", error: error.message };
 
-  await sendInvoiceEmail({
-    senderName: dbPayload.name,
-    senderEmail: dbPayload.email,
-    clientName: dbPayload.client_name,
-    clientEmail: dbPayload.client_email,
-    invoiceLink: `${process.env.APP_BASE_URL}/pdf/${invoiceId}`,
-    isUpdate: true,
-  });
+  // await sendInvoiceEmail({
+  //   senderName: dbPayload.name,
+  //   senderEmail: dbPayload.email,
+  //   clientName: dbPayload.client_name,
+  //   clientEmail: dbPayload.client_email,
+  //   invoiceLink: `${process.env.APP_BASE_URL}/pdf/${invoiceId}`,
+  //   isUpdate: true,
+  // });
 
   revalidatePath('/dashboard', 'layout');
   revalidatePath('/invoices', 'page');
