@@ -58,6 +58,8 @@ export default function InvoiceControls({ invoice } : InvoiceControlsProps){
         invoice.client_email!,
         `${process.env.APP_BASE_URL}/pdf/${invoice.id}`
       )
+      setOpen(false) 
+      setStatus(null);
     })
   }
 
@@ -110,6 +112,7 @@ export default function InvoiceControls({ invoice } : InvoiceControlsProps){
           >
             <span><FaBell/></span>
             <span>Reminder</span>
+            <span>{status === "reminder" && <CgSpinnerTwoAlt className="animate-spin"/>}</span>
           </DropdownMenuItem>
         )}
         

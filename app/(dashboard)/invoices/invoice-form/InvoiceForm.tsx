@@ -141,11 +141,16 @@ export default function InvoiceForm({
     }
 
     if (!initialFormValues) {
-      form.reset();
       setDiscountValue("");
       setDiscountType("$");
       setSelectedDate(new Date());
       setSelectedDueDate(undefined);
+      setName("")
+      setEmail("")
+      setAddress("")
+      setClientName("")
+      setClientEmail("")
+      setClientAddress("")
       setRows([{ description: "", quantity: "0", rate: "0", amount: "0" }]);
       toast.success("Invoice Sent", {
         description: "Invoice has been sent"

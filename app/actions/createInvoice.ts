@@ -43,6 +43,7 @@ export async function createInvoice(formData : FormData) : Promise<{error:string
 
   if (!parsed.success) {
     const errorMessage = parsed.error.errors[0].message;
+    console.log(parsed.error.errors)
     return {success : "", error: errorMessage };
   }
 
