@@ -28,6 +28,7 @@ export default function Hero() {
           <Image
             src="/dashboard.png"
             alt="dashboard"
+            priority
             fill
             className="object-fill lg:object-cover object-top"
           />

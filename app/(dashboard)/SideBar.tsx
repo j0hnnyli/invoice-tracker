@@ -14,10 +14,9 @@ export default function SideBar({ name } : Props){
       <div className="flex flex-col items-center justify-center gap-2 playfair ">
         <TbFileInvoice className="text-7xl"/>
         <h2 className="text-4xl">InvoTracker</h2>
-        <p className="mt-2 text-white/70 text-xl"> <strong>{name}</strong></p>
+        <p className="mt-2 text-white/70 text-xl"> <strong>{name}</strong></p>  
       </div>
       <div className="mt-10 flex flex-col gap-3 playfair">
-
         <Link href="/dashboard" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10">
           <MdDashboard className="text-3xl"/>
           <p className="text-xl">DashBoard</p>
