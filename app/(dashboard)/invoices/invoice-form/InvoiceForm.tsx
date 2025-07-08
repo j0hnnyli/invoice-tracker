@@ -157,7 +157,7 @@ export default function InvoiceForm({
       });
     } else {
       toast.success("Sent Updated Invoice", {
-        description : "Updated Invoice has benn sent"
+        description : "Updated Invoice has been sent"
       });
     }
 
