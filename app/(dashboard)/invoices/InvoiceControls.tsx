@@ -76,18 +76,18 @@ export default function InvoiceControls({ invoice } : InvoiceControlsProps){
             handleUpdateStatus(invoice.status === "Open" ? "Paid" : "Open")
           }}
           disabled={status === "Paid" || status === "Open"}
-          className="text-lg hover:bg-white/20 flex items-center justify-between cursor-pointer"
+          className="hover:bg-white/20 flex items-center justify-between cursor-pointer"
         >
           <div className="flex items-center gap-2">
-            <span>{invoice.status === "Open" ? <MdPaid/> : <FaEnvelopeOpenText/>}</span>
-            <span>{invoice.status === "Open" ? "Paid" : "Reopen"}</span>
+            <span>{(invoice.status === "Open" || invoice.status === "Overdue" ) ? <MdPaid/> : <FaEnvelopeOpenText/>}</span>
+            <span>{(invoice.status === "Open" || invoice.status === "Overdue" ) ? "Paid" : "Reopen"}</span>
           </div>
           <span>{(status === "Paid" || status === "Open") && <CgSpinnerTwoAlt className="animate-spin"/>}</span>
         </DropdownMenuItem>
         
         <DropdownMenuItem
           onSelect={() => window.open(`/pdf/${invoice.id}`)}
-          className="text-lg hover:bg-white/20 cursor-pointer flex items-center gap-2" 
+          className="hover:bg-white/20 cursor-pointer flex items-center gap-2" 
         >
           <span><FaEye/></span>
           <span>View</span>
@@ -95,7 +95,7 @@ export default function InvoiceControls({ invoice } : InvoiceControlsProps){
        
         <DropdownMenuItem
           onSelect={() => router.push(`/invoices/${invoice.id}`)}
-          className="text-lg hover:bg-white/20 cursor-pointer flex items-center gap-2" 
+          className="hover:bg-white/20 cursor-pointer flex items-center gap-2" 
         >
           <span><FaPencil/></span>
           <span>Update</span>
@@ -108,7 +108,7 @@ export default function InvoiceControls({ invoice } : InvoiceControlsProps){
               handleSendReminder();
             }}
             disabled={status === "reminder"}
-            className="text-lg hover:bg-white/20 cursor-pointer flex items-center gap-2" 
+            className="hover:bg-white/20 cursor-pointer flex items-center gap-2" 
           >
             <span><FaBell/></span>
             <span>Reminder</span>
@@ -126,7 +126,7 @@ export default function InvoiceControls({ invoice } : InvoiceControlsProps){
             handleDeleteInvoice();
           }}
           disabled={status === "Delete"}
-          className="text-lg hover:bg-white/20 flex items-center justify-between cursor-pointer"
+          className="hover:bg-white/20 flex items-center justify-between cursor-pointer"
         >
           <div className="flex items-center gap-2">
             <span><FaRegTrashAlt className="text-red-400"/></span>

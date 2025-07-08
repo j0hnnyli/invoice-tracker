@@ -12,7 +12,7 @@ export default function DownloadLink({ data }: Props) {
     <PDFDownloadLink
       document={<Invoice data={data} />}
       fileName={`invoice-${data.invoice_number}.pdf`}
-      className="text-lg flex items-center gap-2 cursor-pointer w-full h-full"
+      className="flex items-center gap-2 cursor-pointer w-full h-full"
     >
       <span>
         <IoCloudDownloadOutline />
