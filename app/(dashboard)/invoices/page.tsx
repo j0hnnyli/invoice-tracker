@@ -13,13 +13,13 @@ const statusColors: Record<string, string> = {
 };
 
 type Props = {
-  searchParams: Promise<{ filter?: string }>;
+  searchParams: Promise<{ filter?: string, year : string }>;
 };
 
 export default async function Invoices({ searchParams }: Props) {
-  const { data, error } = await getAllInvoices();
-  const params = await searchParams;
-  const filter = params.filter;
+  const { filter, year } = await searchParams;
+  const { data, error } = await getAllInvoices(Number(year));
+
 
   const filtered = filter ? data?.filter((inv) => inv.status === filter) : data;
 

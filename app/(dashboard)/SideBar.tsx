@@ -3,6 +3,7 @@ import { LiaFileInvoiceSolid } from "react-icons/lia";
 import { MdDashboard } from "react-icons/md";
 import SignoutButton from "@/components/SignoutButton";
 import Link from "next/link";
+import YearDropDown from "@/components/YearDropDown";
 
 type Props = {
   name : string;
@@ -15,14 +16,15 @@ export default function SideBar({ name } : Props){
         <TbFileInvoice className="text-7xl"/>
         <h2 className="text-4xl">InvoTracker</h2>
         <p className="mt-2 text-white/70 text-xl"> <strong>{name}</strong></p>  
+        <YearDropDown />
       </div>
       <div className="mt-10 flex flex-col gap-3 playfair">
-        <Link href="/dashboard" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10">
+        <Link href={`/dashboard?year=${new Date().getFullYear()}`} className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10">
           <MdDashboard className="text-3xl"/>
           <p className="text-xl">DashBoard</p>
         </Link>
         
-        <Link href="/invoices" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10">
+        <Link href={`/invoices?year=${new Date().getFullYear()}`} className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10">
           <LiaFileInvoiceSolid className="text-3xl"/>
           <p className="text-xl">Invoices</p>
         </Link>

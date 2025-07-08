@@ -10,8 +10,14 @@ import { getDashboardInfo } from "@/lib/supabaseDataFns";
 import FadeInContainer from "@/components/animation-components/AnimateFadeInContiner";
 
 
-export default async function Dashboard(){
-  const {data, error} = await getDashboardInfo();
+type DashboardProps = {
+  searchParams : Promise<{year : string}>
+}
+
+export default async function Dashboard({searchParams} : DashboardProps){
+  const year = (await searchParams).year;
+
+  const {data, error} = await getDashboardInfo(Number(year));
 
   if(error || !data){
     return (

@@ -57,12 +57,17 @@ export async function getEarnings() {
   return earningsByMonth.slice(0, currentMonth + 1);
 }
 
-export const getAllInvoices = async () => {
+export const getAllInvoices = async (year : number) => {
   const supabase = await createClient();
+
+  const startOfYear = new Date(`${year}-01-01T00:00:00Z`).toISOString();
+  const startOfNextYear = new Date(`${year + 1}-01-01T00:00:00Z`).toISOString();
 
   const { data: invoices, error } = await supabase
     .from("invoices")
     .select("*")
+    .gte("created_at", startOfYear)
+    .lt("created_at", startOfNextYear);
 
   if (error) {
     return { data : null,  error: error.message }
@@ -129,8 +134,8 @@ export const getRecentOverdueInvoices = async () => {
   return { data , error : null}
 }
 
-export const getDashboardInfo = async () => {
-  const {data: invoices, error} = await getAllInvoices();
+export const getDashboardInfo = async (year : number) => {
+  const {data: invoices, error} = await getAllInvoices(year);
 
   if(!invoices || error){
     return {data: null, error : error}
@@ -150,4 +155,21 @@ export const getDashboardInfo = async () => {
     },
     error: null
   }
+}
+
+export const getUserYears = async () => {
+  const user = await getUser();
+
+  if(!user) return [];
+
+  const userCreatedAtYear = new Date(user.created_at).getFullYear();
+  const currentYear = new Date().getFullYear();
+
+  const years = [];
+
+  for(let year = userCreatedAtYear; year <= currentYear; year++){
+    years.push(year)
+  }
+
+  return years;
 }

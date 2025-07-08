@@ -9,7 +9,7 @@ export default async function SignInDashboardLink({ text = "Sign In" }: Props) {
   const user = await getUser();
 
   if (user) {
-    return <HoverAction href="/dashboard">My Dashboard</HoverAction>;
+    return <HoverAction href={`/dashboard?year=${new Date().getFullYear()}`}>My Dashboard</HoverAction>;
   }
 
   return <HoverAction href="/login">{text}</HoverAction>;
