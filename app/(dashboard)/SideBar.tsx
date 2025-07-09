@@ -4,6 +4,7 @@ import { MdDashboard } from "react-icons/md";
 import SignoutButton from "@/components/SignoutButton";
 import Link from "next/link";
 import YearDropDown from "@/components/YearDropDown";
+import { links } from "@/lib/link";
 
 type Props = {
   name : string;
@@ -19,12 +20,12 @@ export default function SideBar({ name } : Props){
         <YearDropDown />
       </div>
       <div className="mt-10 flex flex-col gap-3 playfair">
-        <Link href={`/dashboard?year=${new Date().getFullYear()}`} className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10">
+        <Link href={links.dashboard} className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10">
           <MdDashboard className="text-3xl"/>
           <p className="text-xl">DashBoard</p>
         </Link>
         
-        <Link href={`/invoices?year=${new Date().getFullYear()}`} className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10">
+        <Link href={links.invoices} className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10">
           <LiaFileInvoiceSolid className="text-3xl"/>
           <p className="text-xl">Invoices</p>
         </Link>

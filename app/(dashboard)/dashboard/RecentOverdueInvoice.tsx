@@ -1,3 +1,4 @@
+import { links } from "@/lib/link";
 import { getRecentOverdueInvoices } from "@/lib/supabaseDataFns"
 import Link from "next/link";
 
@@ -10,7 +11,7 @@ export default async function RecentOverdueInvoices(){
       <div className="p-1">
         <div className="flex items-center justify-between">
           <h2 className="playfair text-xl">Recent Overdue Invoices</h2>
-          <Link href="/invoices" className="text-sm hover:text-gray-300 hover:underline">View all</Link>
+          <Link href={links.invoices} className="text-sm hover:text-gray-300 hover:underline">View all</Link>
         </div>
         <p className="text-sm">Past 30 Days</p>
       </div>

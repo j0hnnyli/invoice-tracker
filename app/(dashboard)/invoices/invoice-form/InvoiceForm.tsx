@@ -13,6 +13,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import FadeInContainer from "@/components/animation-components/AnimateFadeInContiner";
 import Link from "next/link";
 import PreviewButton from "@/components/pdf/PreviewButton";
+import { links } from "@/lib/link";
 
 type Row = {
   description: string;
@@ -187,7 +188,7 @@ export default function InvoiceForm({
 
         <FadeInContainer direction="left" duration={0.4} className="flex">
           <Link
-            href="/invoices"
+            href={links.invoices}
             className="p-2 rounded-lg bg-white/20 hover:bg-white/10"
           >
             <FaArrowLeftLong />

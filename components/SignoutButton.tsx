@@ -24,7 +24,7 @@ export default function SignoutButton({ className, onComplete } : Props) {
   return (
     <button
       onClick={handleSignout}
-      className={twMerge("flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 cursor-pointer", className)}
+      className={twMerge("flex items-center gap-2 md:p-1 rounded-lg hover:bg-white/10 cursor-pointer", className)}
       disabled={isPending}
     >
       {isPending ? (
