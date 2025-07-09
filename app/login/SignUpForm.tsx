@@ -5,32 +5,39 @@ import HoverAction from "@/components/HoverAction";
 import TogglePasswordInput from "@/components/TogglePasswordInput";
 import Link from "next/link";
 import { signup } from "../actions/signup";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { toast } from "sonner";
 
 export default function SignUpForm(){
+  const formRef = useRef<HTMLFormElement>(null)
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e : FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const result = await signup(formData);
-    setErrorMsg(result.error);
-    setSuccess(result.success);
-    setIsLoading(false);
 
-    if(success){
+    if (result.error && result.error.length > 0) {
+      setErrorMsg(result.error);
+      setIsLoading(false);
+      return;  
+    }
+
+    if (result.success) {
       toast.success("Register Successful", {
         description: "Please check your email for verification",
       });
+      formRef.current?.reset();
     }
-  }
+
+
+    setIsLoading(false);
+  };
 
   const resetError = () => {
     if(errorMsg.length > 0){
@@ -40,6 +47,7 @@ export default function SignUpForm(){
 
   return (
     <form 
+      ref={formRef}
       onSubmit={handleSubmit}
       className="text-white"
     >
