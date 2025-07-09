@@ -1,3 +1,4 @@
+import { links } from "@/lib/link";
 import { getUser } from "@/lib/supabaseDataFns";
 import Link from "next/link";
 
@@ -14,7 +15,7 @@ export default async function NotFoundPage() {
           Sorry, the page you&apos;re looking for doesn&apos;t exist.
         </p>
         <Link
-          href={user ? "/dashboard" : "/"}
+          href={user ? `${links.dashboard}` : "/"}
           className="px-4 py-2 bg-white/20 hover:bg-white/10 text-white rounded transition"
         >
           {user ? "Go to Dashboard" : "Go Home"}

@@ -9,15 +9,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { links } from "@/lib/link";
+import Link from "next/link";
 
 type MediaNavBarMenuProps = {
   inital : string;
 }
 
 export default function MediaNavBarMenu({inital} : MediaNavBarMenuProps){
-  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   return (
@@ -26,23 +26,29 @@ export default function MediaNavBarMenu({inital} : MediaNavBarMenuProps){
         {inital}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-white/20 border-none backdrop-blur-3xl text-white">        
-        <DropdownMenuItem
-          onSelect={() => router.push("/dashboard")}
-          className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10"
-        >
-          <MdDashboard className="text-3xl" />
-          <p className="text-xl">Dashboard</p>
+        <DropdownMenuItem onClick={() => setOpen(false)}>
+          <Link 
+            href={links.dashboard}
+            className="flex items-center gap-2 rounded-lg hover:bg-white/10"
+          >
+            <MdDashboard className="text-3xl" />
+            <p className="text-xl">Dashboard</p>
+          </Link>
         </DropdownMenuItem>
 
-        <DropdownMenuItem
-          onSelect={() => router.push("/invoices")}
-          className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10"
-        >
-          <LiaFileInvoiceSolid className="text-3xl" />
-          <p className="text-xl">Invoices</p>
+        <DropdownMenuItem onClick={() => setOpen(false)}>
+          <Link 
+            href={links.invoices}
+            className="flex items-center gap-2 rounded-lg hover:bg-white/10"
+          >
+            <LiaFileInvoiceSolid className="text-3xl" />
+            <p className="text-xl">Invoices</p>
+          </Link>
         </DropdownMenuItem>
         
-        <SignoutButton className="justify-center" onComplete={() => setOpen(false)}/>
+        <DropdownMenuItem>
+          <SignoutButton className="justify-center" onComplete={() => setOpen(false)}/>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

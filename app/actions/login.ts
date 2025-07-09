@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import { loginSchema } from '@/lib/schema/loginSchema';
+import { links } from '@/lib/link';
 
 export async function login(formData: FormData) {
   const rawData = {
@@ -26,5 +27,5 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath('/dashboard', 'layout')
-  redirect('/dashboard')
+  redirect(links.dashboard)
 }
