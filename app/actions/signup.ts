@@ -1,10 +1,7 @@
 'use server'
 
-import { revalidatePath } from 'next/cache';
 import { createClient } from '@/utils/supabase/server';
 import { signupSchema } from '@/lib/schema/signupSchema';
-import { redirect } from 'next/navigation';
-
 
 export async function signup(formData: FormData ) {
   const rawData = {
@@ -36,7 +33,5 @@ export async function signup(formData: FormData ) {
     return {success: false, error : error.message}
   }
 
-  revalidatePath('/dashboard', 'layout')
-  redirect('/login')
   return {success: true ,error: ""}
 }
