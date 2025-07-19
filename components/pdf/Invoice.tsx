@@ -162,8 +162,13 @@ export default function Invoice({ data }: InvoiceDocumentProps) {
               <Text style={styles.playfair}>{data.sub_total?.toFixed(2)}</Text> 
             </View>
             <View style={styles.totalSection}>
-              <Text>Discount :</Text> 
-              <Text style={styles.playfair}>{data.discount_type === '$' && data.discount_type} {data.discount_value || '0'} {data.discount_type === '%' && data.discount_type}</Text> 
+              {data.discount_value && Number(data.discount_value) > 0 && data.discount_type && (
+                <>
+                  <Text>Discount :</Text> 
+                  <Text style={styles.playfair}>{data.discount_type === '$' && data.discount_type} {data.discount_value || '0'}   {data.discount_type === '%' && data.discount_type}
+                  </Text> 
+                </>
+              )}
             </View>
             <View style={styles.totalSection}>
               <Text>Total :</Text> 
