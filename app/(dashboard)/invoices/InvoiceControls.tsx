@@ -27,16 +27,28 @@ type InvoiceControlsProps = {
 export default function InvoiceControls({ invoice } : InvoiceControlsProps){
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [status, setStatus] = useState<"Paid" | "Delete" | "Open" | "reminder"| null>(null);
+  const [status, setStatus] = useState<"Paid" | "Delete" | "Open" | "reminder" | "Overdue" | null>(null);
   const [open, setOpen] = useState(false);
 
-  const handleUpdateStatus = (status : "Open" | "Paid") => {
-    setStatus(status)
+  const handleUpdateStatus = (nextStatus: "Paid" | "Open" | "Overdue") => {
+    setStatus(nextStatus);
+
     startTransition(async () => {
-      await updateStatus(status, invoice.id)
-      setOpen(false) 
+      let finalStatus = nextStatus;
+
+      if (nextStatus === "Open" && invoice.due_date) {
+        const now = new Date();
+        const dueDate = new Date(invoice.due_date);
+
+        if (dueDate < now) {
+          finalStatus = "Overdue";
+        }
+      }
+
+      await updateStatus(finalStatus, invoice.id);
+      setOpen(false);
       setStatus(null);
-    })
+    });
   }
 
   const handleDeleteInvoice = () => {
@@ -73,7 +85,7 @@ export default function InvoiceControls({ invoice } : InvoiceControlsProps){
         <DropdownMenuItem 
           onSelect={(e) => {
             e.preventDefault()
-            handleUpdateStatus(invoice.status === "Open" ? "Paid" : "Open")
+            handleUpdateStatus(invoice.status === "Paid" ? "Open" : "Paid")
           }}
           disabled={status === "Paid" || status === "Open"}
           className="hover:bg-white/20 flex items-center justify-between cursor-pointer"
